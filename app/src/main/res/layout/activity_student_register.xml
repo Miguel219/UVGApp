@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".AdminRegisterActivity" android:background="#0A9B31">
+
+    <TextView
+            android:text="Estudiante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3" android:textSize="30sp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="@+id/studentImageUpload"
+            android:layout_marginTop="30dp" android:layout_marginStart="17dp"
+            android:layout_marginBottom="18dp" app:layout_constraintBottom_toTopOf="@+id/studentImageUpload"/>
+    <EditText
+            android:layout_width="250dp"
+            android:layout_height="0dp"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/student_name_textview"
+            android:hint="Nombre"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/changeImage"
+            android:layout_marginBottom="20dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/student_mail_textview"
+            app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="14dp"
+            android:id="@+id/changeImage"
+            app:layout_constraintTop_toBottomOf="@+id/studentImageUpload" android:layout_marginEnd="28dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/studentImageUpload"
+            app:layout_constraintBottom_toTopOf="@+id/student_name_textview"/>
+    <EditText
+            android:layout_width="250dp"
+            android:layout_height="0dp"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/student_mail_textview"
+            android:hint="Correo"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/student_name_textview"
+            android:layout_marginBottom="19dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/student_password_textview"
+            app:layout_constraintStart_toStartOf="parent"/>
+    <EditText
+            android:layout_width="250dp"
+            android:layout_height="0dp"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/student_password_textview"
+            android:hint="Contraseña"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/student_mail_textview"
+            android:layout_marginBottom="20dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/career_spinner" app:layout_constraintStart_toStartOf="parent"/>
+    <Spinner
+            android:layout_width="250dp"
+            android:layout_height="0dp"
+            android:id="@+id/career_spinner"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/student_password_textview"
+            android:layout_marginBottom="32dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/okbutton" app:layout_constraintStart_toStartOf="parent"/>
+    <Button
+            android:text="Listo"
+            android:layout_width="114dp"
+            android:layout_height="0dp"
+            android:id="@+id/okbutton"
+            android:background="@android:color/black" android:textSize="18sp" android:textColor="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/career_spinner" android:layout_marginBottom="35dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    <ImageView
+            android:layout_width="177dp"
+            android:layout_height="161dp" app:srcCompat="@drawable/avatar"
+            android:id="@+id/studentImageUpload"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/changeImage" app:layout_constraintStart_toStartOf="parent"/>
+</android.support.constraint.ConstraintLayout>
