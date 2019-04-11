@@ -2,6 +2,8 @@ package com.example.douglasdeleon.horasuvg.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.util.EventLog
 import android.view.LayoutInflater
@@ -41,10 +43,16 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
             val title: TextView =itemView.findViewById(R.id.text_view_title)
             val date: TextView =itemView.findViewById(R.id.text_view_date)
             val description: TextView =itemView.findViewById(R.id.text_view_description)
+            val button: TextView =itemView.findViewById(R.id.assignedButton)
 
             title.text=data.name
             date.text=data.date
             description.text=data.description
+
+            if(data.assigned){
+                button.text = "Asignado"
+                button.setBackgroundColor(Color.WHITE)
+            }
         }
     }
 

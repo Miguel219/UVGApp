@@ -14,6 +14,7 @@ import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.adapter.AdminEventsAdapter
 import com.example.douglasdeleon.horasuvg.adapter.StudentEventsAdapter
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_admin_events.*
 import kotlinx.android.synthetic.main.activity_student_events.*
 
 class StudentEventsActivity : Fragment() {
@@ -42,8 +43,13 @@ class StudentEventsActivity : Fragment() {
             .addOnSuccessListener { documentSnapshot ->
                 documentSnapshot.forEach {
                     var event: Event = it.toObject(Event::class.java)!!
-                    MyApplication.eventsList.add(event)
-                    recyclerStudentEvents.adapter = adapter
+
+                    db.collection("userevents").whereEqualTo("userId",MyApplication.userInsideId).whereEqualTo("eventId",it.id).get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            event.assigned = !documentSnapshot.isEmpty
+                            MyApplication.eventsList.add(event)
+                            recyclerStudentEvents.adapter = adapter
+                        }
                 }
             }
     }

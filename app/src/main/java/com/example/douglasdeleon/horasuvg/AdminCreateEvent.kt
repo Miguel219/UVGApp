@@ -102,9 +102,15 @@ class AdminCreateEvent: Fragment() {
             builder.show()
 
         } else {
-            var newEvent: Event = Event(nameStr, descriptionStr, placeStr, dateStr)
+
+            val newEvent = HashMap<String, String>()
+            newEvent.put("name", nameStr)
+            newEvent.put("description", descriptionStr)
+            newEvent.put("place", placeStr)
+            newEvent.put("date", dateStr)
+
             var doc = FirebaseFirestore.getInstance().collection("events").document()
-            doc.set(newEvent).addOnCompleteListener {
+            doc.set(newEvent as Map<String, Any>).addOnCompleteListener {
                 val relation = HashMap<String, String>()
                 relation.put("userId", MyApplication.userInsideId)
                 relation.put("eventId", doc.id)
