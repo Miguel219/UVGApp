@@ -57,15 +57,12 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private var mAuthTask: UserLoginTask? = null
-    private var mFirebaseAuth: FirebaseAuth? = null
+    private var mFirebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     val db:FirebaseFirestore = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        //Inicializa FireBase
-
-        mFirebaseAuth = FirebaseAuth.getInstance();
         // Set up the login form.
         populateAutoComplete()
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
@@ -146,7 +143,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         if(cancel) {
             Toast.makeText(this@LoginActivity, "Correo no válido.", Toast.LENGTH_LONG).show()
         }else {
-            mFirebaseAuth!!.sendPasswordResetEmail(emailStr)
+            mFirebaseAuth.sendPasswordResetEmail(emailStr)
                 .addOnCompleteListener() {
                     Toast.makeText(this@LoginActivity, "Correo enviado satisfactoriamente", Toast.LENGTH_LONG).show()
                 }
@@ -201,7 +198,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             showProgress(true)
             mAuthTask = UserLoginTask(emailStr, passwordStr)
             mAuthTask!!.execute(null as Void?)
-            mFirebaseAuth!!.signInWithEmailAndPassword(emailStr,passwordStr).addOnFailureListener(){
+            mFirebaseAuth.signInWithEmailAndPassword(emailStr,passwordStr).addOnFailureListener(){
 
 
 
@@ -219,15 +216,10 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 builder.show()
 
 
-
-
-
-
-
             }
-            mFirebaseAuth!!.signInWithEmailAndPassword(emailStr,passwordStr).addOnCompleteListener{
+            mFirebaseAuth.signInWithEmailAndPassword(emailStr,passwordStr).addOnCompleteListener{
                 if (it.isSuccessful){
-                    MyApplication.userInsideId = mFirebaseAuth!!.currentUser!!.uid
+                    MyApplication.userInsideId = mFirebaseAuth.currentUser!!.uid
                     db.collection("users").document(MyApplication.userInsideId).get()
                         .addOnSuccessListener { documentSnapshot ->
                             var user:UserInside = documentSnapshot.toObject(UserInside::class.java)!!
@@ -240,28 +232,10 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
                         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     Toast.makeText(this@LoginActivity,"Se ha iniciado sesión correctamente",Toast.LENGTH_LONG).show()
                 }
 
             }
-
-
-
         }
     }
 

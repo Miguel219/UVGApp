@@ -104,7 +104,7 @@ class LoggedIn : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
                     .commit()
             }
             R.id.nav_logout -> {
-                MyApplication.userInsideId= "";
+                MyApplication.userInsideId= ""
                 val intent: Intent = Intent(this, LoginActivity::class.java);
                 startActivity(intent);
                 Toast.makeText(this, "Sesión cerrada correctamente.", Toast.LENGTH_LONG).show()
@@ -112,10 +112,10 @@ class LoggedIn : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
             R.id.nav_settings -> {
                 if(MyApplication.userInside.type==1) {
                     val intent: Intent = Intent(this, StudentRegisterActivity::class.java);
-                    startActivity(intent);
+                    startActivity(intent)
                 }else{
                     val intent: Intent = Intent(this, AdminRegisterActivity::class.java);
-                    startActivity(intent);
+                    startActivity(intent)
                 }
 
             }

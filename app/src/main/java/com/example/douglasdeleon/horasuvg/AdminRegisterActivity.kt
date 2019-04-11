@@ -26,11 +26,14 @@ class AdminRegisterActivity : AppCompatActivity() {
 
 
     val PICK_PHOTO_CODE = 1046
-    private var mFirebaseAuth: FirebaseAuth? = null
+    private var mFirebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     lateinit var spinner: Spinner
-    var edit_message="";
+    var edit_message=""
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        var RESULT_LOAD_IMAGE:Int =1;
+        var RESULT_LOAD_IMAGE:Int =1
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_register)
         if(MyApplication.userInsideId==""){
@@ -71,10 +74,7 @@ class AdminRegisterActivity : AppCompatActivity() {
                 // Bring up gallery to select a photo
                 startActivityForResult(intent, PICK_PHOTO_CODE)
             }
-
         }
-        //Inicializa FireBase
-        mFirebaseAuth = FirebaseAuth.getInstance();
 
         okbuttona.setOnClickListener {
             register()
@@ -84,12 +84,12 @@ class AdminRegisterActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         //https://github.com/codepath/android_guides/wiki/Accessing-the-Camera-and-Stored-Media
         if (data != null) {
-            var photoUri: Uri = data.getData();
+            var photoUri: Uri = data.data!!
             // Do something with the photo based on Uri
-            var selectedImage: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri);
+            var selectedImage: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri)
             // Load the selected image into a preview
 
-            adminImageUpload.setImageBitmap(selectedImage);
+            adminImageUpload.setImageBitmap(selectedImage)
             Toast.makeText(this@AdminRegisterActivity, "Imagen cargada con éxito.. ", Toast.LENGTH_SHORT).show();
 
         }
@@ -100,7 +100,7 @@ class AdminRegisterActivity : AppCompatActivity() {
         val passwordStr = admin_password_textview.text.toString()
         val nameStr = admin_name_textview3.text.toString()
         val token = admin_token_textview.text.toString()
-        var email=false;
+        var email=false
         var cancel = false
         var message = ""
 
@@ -150,24 +150,24 @@ class AdminRegisterActivity : AppCompatActivity() {
 
         } else {
             if(MyApplication.userInsideId=="") {
-                mFirebaseAuth!!.createUserWithEmailAndPassword(emailStr, passwordStr).addOnCompleteListener {
+                mFirebaseAuth.createUserWithEmailAndPassword(emailStr, passwordStr).addOnCompleteListener {
                     if (it.isSuccessful) {
                         var newUser: User = User(nameStr, emailStr, 2,"")
                         if (MyApplication.userInsideId == "") {
-                            FirebaseFirestore.getInstance().collection("users")
-                                .document(mFirebaseAuth!!.currentUser!!.uid)
-                                .set(newUser);
+                           db.collection("users")
+                                .document(mFirebaseAuth.currentUser!!.uid)
+                                .set(newUser)
                         } else {
-                            FirebaseFirestore.getInstance().collection("users").document(MyApplication.userInsideId)
-                                .set(newUser);
+                            db.collection("users").document(MyApplication.userInsideId)
+                                .set(newUser)
                         }
                         Toast.makeText(this, "$edit_message", Toast.LENGTH_LONG).show()
                         MyApplication.userInsideId = ""
-                        val intent = Intent(this, LoginActivity::class.java);
-                        startActivity(intent);
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
                     }
                 }
-                mFirebaseAuth!!.createUserWithEmailAndPassword(emailStr, passwordStr).addOnFailureListener() {
+                mFirebaseAuth.createUserWithEmailAndPassword(emailStr, passwordStr).addOnFailureListener() {
 
 
                     val builder = AlertDialog.Builder(this)
@@ -186,11 +186,11 @@ class AdminRegisterActivity : AppCompatActivity() {
 
                 }
             }else{
-                mFirebaseAuth!!.currentUser!!.updateEmail(emailStr)
-                mFirebaseAuth!!.currentUser!!.updatePassword(passwordStr)
+                mFirebaseAuth.currentUser!!.updateEmail(emailStr)
+                mFirebaseAuth.currentUser!!.updatePassword(passwordStr)
                 var newUser: User = User(nameStr,emailStr,0,"")
-                FirebaseFirestore.getInstance().collection("users").document(MyApplication.userInsideId)
-                    .set(newUser);
+                db.collection("users").document(MyApplication.userInsideId)
+                    .set(newUser)
 
 
 
