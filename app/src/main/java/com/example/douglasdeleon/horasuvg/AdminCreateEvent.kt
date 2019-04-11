@@ -1,9 +1,11 @@
 package com.example.douglasdeleon.horasuvg
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,32 +44,79 @@ class AdminCreateEvent: Fragment() {
         activity!!.title = "Crear Evento"
 
         buttonCreate.setOnClickListener {
+            createEvent()
         }
 
         dateButton = view.findViewById(R.id.dateButton)
         date = view.findViewById(R.id.date_editText)
         val calendar: Calendar = Calendar.getInstance()
 
-        } else {
-            var newEvent: Event = Event(nameStr,descriptionStr,placeStr,dateStr)
-            var doc = FirebaseFirestore.getInstance().collection("events").document()
-            doc.set(newEvent).addOnCompleteListener {
-                val relation = HashMap<String,String>()
-                relation.put("userId", MyApplication.userInsideId)
-                relation.put("eventId", doc.id)
-                FirebaseFirestore.getInstance().collection("userevents").document().set(relation as Map<String, Any>)
-            }
-
-
         dateButton.setOnClickListener {
             datePicker = DatePickerDialog(activity,
                 DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                    date.text = "${dayOfMonth}/${month}/${year}" },
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH))
+                    date.text = "${dayOfMonth}/${month+1}/${year}" },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH))
 
             datePicker.show()
+        }
+    }
+
+    private fun createEvent(){
+        val nameStr = name_editText.text.toString()
+        val descriptionStr = description_editText.text.toString()
+        val placeStr = place_editText.text.toString()
+        val dateStr = date_editText.text.toString()
+        var cancel = false
+        var message = ""
+
+        if(nameStr==""){
+            message="El nombre no puede estar vacío."
+            cancel = true
+        }else if(descriptionStr==""){
+            message="La descripción no puede estar vacía."
+            cancel = true
+        }else if(placeStr==""){
+            message="El lugar no puede estar vacío."
+            cancel = true
+        }else if(dateStr==""){
+            message="La fecha no puede estar vacía."
+            cancel = true
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            // Initialize a new instance of
+            val builder = AlertDialog.Builder(thisContext!!)
+
+            // Enviar alerta
+            builder.setTitle("Error")
+
+            // Mostrar mensaje de alerta si los datos no son validos
+            builder.setMessage("$message")
+            builder.setPositiveButton("Ok"){dialog, which ->
+
+            }
+            builder.show()
+
+        } else {
+            var newEvent: Event = Event(nameStr, descriptionStr, placeStr, dateStr)
+            var doc = FirebaseFirestore.getInstance().collection("events").document()
+            doc.set(newEvent).addOnCompleteListener {
+                val relation = HashMap<String, String>()
+                relation.put("userId", MyApplication.userInsideId)
+                relation.put("eventId", doc.id)
+                FirebaseFirestore.getInstance().collection("userevents").document().set(relation as Map<String, Any>)
+
+                var fragmentManager: FragmentManager = fragmentManager!!
+                var fragment: Fragment = Start()
+                fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
+                Toast.makeText(thisContext, "Se ha creado el evento correctamente", Toast.LENGTH_LONG).show()
+            }
         }
 
     }
