@@ -17,5 +17,7 @@ internal class MyApplication : Application() {
     companion object {
         var userInsideId:String =""
         lateinit var userInside:UserInside
+        var eventsList: ArrayList<Event> = ArrayList<Event>()
+        var selectedEvent: Event = Event()
     }
 }

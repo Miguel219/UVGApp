@@ -25,17 +25,17 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string-array name="carreras">
-        <item> Ing. en Ciencias de la Computación y TI </item>
-        <item> Ing. en Ciencias de la Administración </item>
-        <item> Psicología </item>
-        <item> Matemática </item>
-        <item> Física </item>
+        <item>Ing. en Ciencias de la Computación y TI</item>
+        <item>Ing. en Ciencias de la Administración</item>
+        <item>Psicología</item>
+        <item>Matemática</item>
+        <item>Física</item>
     </string-array>
     <string-array name="departamentos">
-    <item> Ing. en Ciencias de la Computación y TI </item>
-    <item> Ing. en Ciencias de la Administración </item>
-    <item> Psicología </item>
-    <item> Matemática </item>
-    <item> Física </item>
+        <item>Ing. en Ciencias de la Computación y TI</item>
+        <item>Ing. en Ciencias de la Administración</item>
+        <item>Psicología</item>
+        <item>Matemática</item>
+        <item>Física</item>
     </string-array>
 </resources>

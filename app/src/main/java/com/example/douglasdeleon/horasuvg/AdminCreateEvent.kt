@@ -11,9 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.douglasdeleon.horasuvg.Model.Event
+import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.admin_create_event.*
+
+
 
 class AdminCreateEvent: Fragment() {
 
@@ -82,7 +85,15 @@ class AdminCreateEvent: Fragment() {
 
         } else {
             var newEvent: Event = Event(nameStr,descriptionStr,placeStr,dateStr)
-            FirebaseFirestore.getInstance().collection("events").document().set(newEvent)
+            var doc = FirebaseFirestore.getInstance().collection("events").document()
+            doc.set(newEvent).addOnCompleteListener {
+                val relation = HashMap<String,String>()
+                relation.put("userId", MyApplication.userInsideId)
+                relation.put("eventId", doc.id)
+                FirebaseFirestore.getInstance().collection("userevents").document().set(relation as Map<String, Any>)
+            }
+
+
 
             var fragmentManager: FragmentManager = fragmentManager!!
             var fragment: Fragment = Start()

@@ -91,10 +91,18 @@ class LoggedIn : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_hours -> {
-
+                var fragment: Fragment = StudentEventsActivity()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
             }
             R.id.nav_activities -> {
-
+                var fragment: Fragment = AdminEventsActivity()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
             }
             R.id.nav_create_event -> {
                 var fragment: Fragment = AdminCreateEvent()
