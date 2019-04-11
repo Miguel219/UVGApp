@@ -12,11 +12,11 @@ import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
-import kotlinx.android.synthetic.main.activity_logged_in.*
-import kotlinx.android.synthetic.main.app_bar_logged_in.*
-import kotlinx.android.synthetic.main.nav_header_logged_in.*
+import kotlinx.android.synthetic.main.activity_logged_in_admin.*
+import kotlinx.android.synthetic.main.app_bar_logged_in_admin.*
+import kotlinx.android.synthetic.main.nav_header_logged_in_admin.*
 import android.R.id.*
-import kotlinx.android.synthetic.main.nav_header_logged_in.view.*
+import kotlinx.android.synthetic.main.nav_header_logged_in_admin.view.*
 import android.R.*
 import android.net.Uri
 import android.support.v4.app.Fragment
@@ -81,7 +81,7 @@ class LoggedInAdmin : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.logged_in, menu)
+        menuInflater.inflate(R.menu.logged_in_admin, menu)
         return true
     }
 
@@ -90,14 +90,7 @@ class LoggedInAdmin : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_hours -> {
-                var fragment: Fragment = StudentEventsActivity()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit()
-            }
-            R.id.nav_activities -> {
+            R.id.nav_myevents -> {
                 var fragment: Fragment = AdminEventsActivity()
                 supportFragmentManager
                     .beginTransaction()

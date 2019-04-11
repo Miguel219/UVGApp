@@ -37,9 +37,16 @@
         </activity>
         <activity android:name=".StudentRegisterActivity">
         </activity>
-        <activity android:name=".AdminEventsActivity">
+
+        <activity
+                android:name=".LoggedInStudent"
+                android:label="HorasUVG"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".StudentEventsActivity">
+        <activity
+                android:name=".LoggedInAdmin"
+                android:label="HorasUVG"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

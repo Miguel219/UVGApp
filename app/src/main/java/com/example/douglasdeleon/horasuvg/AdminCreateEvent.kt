@@ -58,7 +58,11 @@ class AdminCreateEvent: Fragment() {
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH))
-
+            var now= System.currentTimeMillis() -1000;
+            datePicker.datePicker.minDate= now
+            var months3 = Calendar.getInstance()
+            months3.add(Calendar.MONTH,3)
+            datePicker.datePicker.maxDate= months3.timeInMillis
             datePicker.show()
         }
     }
@@ -68,6 +72,8 @@ class AdminCreateEvent: Fragment() {
         val descriptionStr = description_editText.text.toString()
         val placeStr = place_editText.text.toString()
         val dateStr = date_editText.text.toString()
+        val volunteers = volunteers_editText.text.toString()
+        val hours = hours_editText.text.toString()
         var cancel = false
         var message = ""
 
@@ -82,6 +88,12 @@ class AdminCreateEvent: Fragment() {
             cancel = true
         }else if(dateStr==""){
             message="La fecha no puede estar vacía."
+            cancel = true
+        }else if(hours.toDouble()<=0){
+            message="Las horas deben ser mayores a 0."
+            cancel = true
+        }else if(volunteers.toDouble()<=0){
+            message="La cantidad de voluntarios debe ser mayor a 0."
             cancel = true
         }
 
@@ -104,11 +116,14 @@ class AdminCreateEvent: Fragment() {
         } else {
 
             val newEvent = HashMap<String, String>()
+            newEvent.put("adminId", MyApplication.userInsideId)
             newEvent.put("name", nameStr)
             newEvent.put("description", descriptionStr)
             newEvent.put("place", placeStr)
             newEvent.put("date", dateStr)
-
+            newEvent.put("hours", hours)
+            newEvent.put("volunteers", volunteers)
+            newEvent.put("cupo", hours)
             var doc = FirebaseFirestore.getInstance().collection("events").document()
             doc.set(newEvent as Map<String, Any>).addOnCompleteListener {
                 val relation = HashMap<String, String>()

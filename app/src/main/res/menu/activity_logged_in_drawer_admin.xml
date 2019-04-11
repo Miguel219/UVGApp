@@ -4,14 +4,12 @@
       tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+
+
         <item
-                android:id="@+id/nav_hours"
-                android:icon="@drawable/clock"
-                android:title="Control de Horas"/>
-        <item
-                android:id="@+id/nav_activities"
+                android:id="@+id/nav_myevents"
                 android:icon="@drawable/checklist"
-                android:title="Actividades"/>
+                android:title="Mis eventos"/>
         <item
                 android:id="@+id/nav_create_event"
                 android:icon="@drawable/ic_event_black_24dp"

@@ -12,10 +12,7 @@
                 android:id="@+id/nav_activities"
                 android:icon="@drawable/checklist"
                 android:title="Actividades"/>
-        <item
-                android:id="@+id/nav_create_event"
-                android:icon="@drawable/ic_event_black_24dp"
-                android:title="Crear Evento"/>
+
 
     </group>
 

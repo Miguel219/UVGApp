@@ -12,11 +12,11 @@ import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
-import kotlinx.android.synthetic.main.activity_logged_in.*
-import kotlinx.android.synthetic.main.app_bar_logged_in.*
-import kotlinx.android.synthetic.main.nav_header_logged_in.*
+import kotlinx.android.synthetic.main.activity_logged_in_student.*
+import kotlinx.android.synthetic.main.app_bar_logged_in_student.*
+import kotlinx.android.synthetic.main.nav_header_logged_in_student.*
 import android.R.id.*
-import kotlinx.android.synthetic.main.nav_header_logged_in.view.*
+import kotlinx.android.synthetic.main.nav_header_logged_in_student.view.*
 import android.R.*
 import android.net.Uri
 import android.support.v4.app.Fragment
@@ -81,7 +81,7 @@ class LoggedInStudent : AppCompatActivity(), NavigationView.OnNavigationItemSele
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.logged_in, menu)
+        menuInflater.inflate(R.menu.logged_in_student, menu)
         return true
     }
 
@@ -91,26 +91,16 @@ class LoggedInStudent : AppCompatActivity(), NavigationView.OnNavigationItemSele
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_hours -> {
+
+            }
+            R.id.nav_activities -> {
                 var fragment: Fragment = StudentEventsActivity()
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit()
             }
-            R.id.nav_activities -> {
-                var fragment: Fragment = AdminEventsActivity()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit()
-            }
-            R.id.nav_create_event -> {
-                var fragment: Fragment = AdminCreateEvent()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit()
-            }
+
             R.id.nav_logout -> {
                 MyApplication.userInsideId= ""
                 val intent: Intent = Intent(this, LoginActivity::class.java);

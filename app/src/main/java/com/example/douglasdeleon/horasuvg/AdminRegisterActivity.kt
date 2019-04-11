@@ -7,35 +7,40 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_admin_register.*
 import kotlinx.android.synthetic.main.activity_login.*
 import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
 import android.text.Editable
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.*
+import com.bumptech.glide.Glide
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.Model.User
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.activity_logged_in.*
+import kotlinx.android.synthetic.main.activity_student_register.*
 
 class AdminRegisterActivity : AppCompatActivity() {
 
 
     val PICK_PHOTO_CODE = 1046
+    var imgUpload=false
     private var mFirebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     lateinit var spinner: Spinner
     var edit_message=""
-
+    var imgEdit =false;
+    lateinit var imageText:ImageView ;
+    lateinit var photoUri:Uri;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var RESULT_LOAD_IMAGE:Int =1
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_register)
+        imageText = findViewById<ImageView>(R.id.adminImageUpload)
         if(MyApplication.userInsideId==""){
             edit_message="Usuario creado correctamente."
             okbuttona.text="Listo"
@@ -43,8 +48,21 @@ class AdminRegisterActivity : AppCompatActivity() {
             edit_message="Cambios en usuario realizados correctamente."
             okbuttona.text="Actualizar"
 
+        }
 
-
+        if(MyApplication.userInsideId !="") {
+            admin_mail_textview.text = Editable.Factory.getInstance().newEditable(MyApplication.userInside.email);
+            admin_name_textview3.text = Editable.Factory.getInstance().newEditable(MyApplication.userInside.name);
+            admin_token_textview.text = Editable.Factory.getInstance().newEditable("adminHorasUvg");
+            admin_mail_textview.isEnabled =false;
+//Asignar foto si se esta editando.
+            imageText= findViewById(R.id.adminImageUpload);
+            var url =
+                "https://firebasestorage.googleapis.com/v0/b/proyectoapp-add00.appspot.com/o/" + MyApplication.userInsideId.toString() + "?alt=media"
+            imgEdit =true
+            Glide.with(this@AdminRegisterActivity)
+                .load(url)
+                .into(imageText)
         }
         //Código para funcionalidad del spinner de departamentos.
         spinner = findViewById(R.id.departments_spinner)
@@ -84,8 +102,9 @@ class AdminRegisterActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         //https://github.com/codepath/android_guides/wiki/Accessing-the-Camera-and-Stored-Media
         if (data != null) {
-            var photoUri: Uri = data.data!!
+            photoUri = data.data!!
             // Do something with the photo based on Uri
+            imgUpload=true
             var selectedImage: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri)
             // Load the selected image into a preview
 
@@ -114,6 +133,9 @@ class AdminRegisterActivity : AppCompatActivity() {
             cancel = true
         }else if(nameStr==""){
             message="El nombre no puede estar vacío."
+            cancel = true
+        }else if(imgUpload==false && imgEdit==false){
+            message="Debe tener una imagen."
             cancel = true
         }
 
@@ -152,7 +174,10 @@ class AdminRegisterActivity : AppCompatActivity() {
             if(MyApplication.userInsideId=="") {
                 mFirebaseAuth.createUserWithEmailAndPassword(emailStr, passwordStr).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        var newUser: User = User(nameStr, emailStr, 2,"")
+                        var img =("gs://proyectoapp-add00.appspot.com/"+mFirebaseAuth.currentUser!!.uid.toString())
+                        val storage = FirebaseStorage.getInstance("gs://proyectoapp-add00.appspot.com")
+                        val ref=storage.reference.child(mFirebaseAuth.currentUser!!.uid.toString())
+                        var newUser: User = User(nameStr, emailStr, 2,ref.downloadUrl.toString())
                         if (MyApplication.userInsideId == "") {
                            db.collection("users")
                                 .document(mFirebaseAuth.currentUser!!.uid)
@@ -160,6 +185,9 @@ class AdminRegisterActivity : AppCompatActivity() {
                         } else {
                             db.collection("users").document(MyApplication.userInsideId)
                                 .set(newUser)
+                        }
+                        if(imgUpload==true) {
+                            var uploadTask = ref.putFile(photoUri)
                         }
                         Toast.makeText(this, "$edit_message", Toast.LENGTH_LONG).show()
                         MyApplication.userInsideId = ""
@@ -191,8 +219,15 @@ class AdminRegisterActivity : AppCompatActivity() {
                 var newUser: User = User(nameStr,emailStr,0,"")
                 db.collection("users").document(MyApplication.userInsideId)
                     .set(newUser)
-
-
+                val storage = FirebaseStorage.getInstance("gs://proyectoapp-add00.appspot.com")
+                val ref=storage.reference.child(MyApplication.userInsideId)
+                if(imgUpload==true) {
+                    var uploadTask = ref.putFile(photoUri)
+                }
+                MyApplication.userInsideId=""
+                Toast.makeText(this@AdminRegisterActivity,"$edit_message", Toast.LENGTH_LONG).show()
+                val intent2 = Intent(this@AdminRegisterActivity, LoginActivity::class.java);
+                startActivity(intent2);
 
             }
         }

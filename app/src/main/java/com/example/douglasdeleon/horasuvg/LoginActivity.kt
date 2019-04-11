@@ -224,9 +224,13 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                         .addOnSuccessListener { documentSnapshot ->
                             var user:UserInside = documentSnapshot.toObject(UserInside::class.java)!!
                             MyApplication.userInside = user
-
-                            val intent: Intent = Intent(this, LoggedIn::class.java);
-                            startActivity(intent);
+                            if(MyApplication.userInside.type==1){
+                                val intent: Intent = Intent(this, LoggedInStudent::class.java);
+                                startActivity(intent);
+                            }else{
+                                val intent: Intent = Intent(this, LoggedInAdmin::class.java);
+                                startActivity(intent);
+                            }
                     }
                         .addOnFailureListener { exception ->
 
