@@ -54,7 +54,7 @@ class LoggedInAdmin : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
         var url ="https://firebasestorage.googleapis.com/v0/b/proyectoapp-add00.appspot.com/o/"+MyApplication.userInsideId.toString()+"?alt=media"
 
-        Glide.with(this@LoggedIn)
+        Glide.with(this@LoggedInAdmin)
             .load(url)
             .into(imageText)
 
