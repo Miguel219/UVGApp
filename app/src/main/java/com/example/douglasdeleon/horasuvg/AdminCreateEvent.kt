@@ -1,34 +1,37 @@
 package com.example.douglasdeleon.horasuvg
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.admin_create_event.*
+import java.util.*
 
 class AdminCreateEvent: Fragment() {
 
-    private var mFirebaseAuth: FirebaseAuth? = null
+    private var mFirebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     var thisContext: Context? = null
+    lateinit var dateButton: Button
+    lateinit var date: TextView
+    lateinit var datePicker: DatePickerDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         //returning our layout file
         //change R.layout.yourlayoutfilename for each of your fragments
         thisContext = container!!.context
         return inflater.inflate(com.example.douglasdeleon.horasuvg.R.layout.admin_create_event, container, false)
-
-        //Inicializa FireBase
-        mFirebaseAuth = FirebaseAuth.getInstance();
-
     }
 
 
@@ -40,6 +43,22 @@ class AdminCreateEvent: Fragment() {
         buttonCreate.setOnClickListener {
             createEvent()
         }
+
+        dateButton = view.findViewById(R.id.dateButton)
+        date = view.findViewById(R.id.date_editText)
+        val calendar: Calendar = Calendar.getInstance()
+
+        dateButton.setOnClickListener {
+            datePicker = DatePickerDialog(activity,
+                DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                    date.text = "$dayOfMonth / $month / $year" },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH))
+
+            datePicker.show()
+        }
+
     }
 
     private fun createEvent(){
@@ -82,7 +101,7 @@ class AdminCreateEvent: Fragment() {
 
         } else {
             var newEvent: Event = Event(nameStr,descriptionStr,placeStr,dateStr)
-            FirebaseFirestore.getInstance().collection("events").document().set(newEvent)
+            db.collection("events").document().set(newEvent)
 
             var fragmentManager: FragmentManager = fragmentManager!!
             var fragment: Fragment = Start()
