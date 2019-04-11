@@ -34,9 +34,11 @@ class StudentRegisterActivity : AppCompatActivity() {
     val PICK_PHOTO_CODE = 1046
     var imgUpload=false
     lateinit var spinner: Spinner
-    lateinit var photoUri:Uri;
-    private var mFirebaseAuth: FirebaseAuth? = null
+    lateinit var photoUri: Uri
+    private var mFirebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     var edit_message =""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var RESULT_LOAD_IMAGE:Int =1;
         super.onCreate(savedInstanceState)
@@ -44,15 +46,15 @@ class StudentRegisterActivity : AppCompatActivity() {
         if(MyApplication.userInsideId==""){
             edit_message="Usuario creado correctamente."
             okbutton.text="Listo"
-        }else{
+        }
+        else {
             edit_message="Cambios en usuario realizados correctamente."
             okbutton.text="Actualizar"
-
-
-
         }
+
         //Código para funcionalidad del spinner de carreras.
         spinner = findViewById(R.id.career_spinner)
+
         val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this@StudentRegisterActivity, R.array.carreras , R.layout.support_simple_spinner_dropdown_item )
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -79,8 +81,6 @@ class StudentRegisterActivity : AppCompatActivity() {
             }
 
         }
-        //Inicializa FireBase
-        mFirebaseAuth = FirebaseAuth.getInstance();
 
         okbutton.setOnClickListener {
             register()
@@ -90,7 +90,7 @@ class StudentRegisterActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         //https://github.com/codepath/android_guides/wiki/Accessing-the-Camera-and-Stored-Media
         if (data != null) {
-            photoUri = data.getData();
+            photoUri = data.data!!
             imgUpload=true
             // Do something with the photo based on Uri
             var selectedImage: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri);
@@ -99,9 +99,6 @@ class StudentRegisterActivity : AppCompatActivity() {
             studentImageUpload.setImageBitmap(selectedImage);
 
         }
-
-
-
     }
 
     private fun register()  {
@@ -157,12 +154,12 @@ class StudentRegisterActivity : AppCompatActivity() {
 
         } else {
             if(MyApplication.userInsideId==""){
-            mFirebaseAuth!!.createUserWithEmailAndPassword(emailStr,passwordStr).addOnCompleteListener{
+            mFirebaseAuth.createUserWithEmailAndPassword(emailStr,passwordStr).addOnCompleteListener{
                 if (it.isSuccessful){
-                    var img =("gs://proyectoapp-add00.appspot.com/"+mFirebaseAuth!!.currentUser!!.uid.toString())
+                    var img =("gs://proyectoapp-add00.appspot.com/"+mFirebaseAuth.currentUser!!.uid.toString())
 
                     val storage = FirebaseStorage.getInstance("gs://proyectoapp-add00.appspot.com")
-                    val ref=storage.reference.child(mFirebaseAuth!!.currentUser!!.uid.toString())
+                    val ref=storage.reference.child(mFirebaseAuth.currentUser!!.uid.toString())
 
                     //val bitmap = (selectedImage as BitmapDrawable).bitmap
                     //val baos = ByteArrayOutputStream()
@@ -174,10 +171,10 @@ class StudentRegisterActivity : AppCompatActivity() {
 
 
                     if(MyApplication.userInsideId=="") {
-                        FirebaseFirestore.getInstance().collection("users").document(mFirebaseAuth!!.currentUser!!.uid)
+                        db.collection("users").document(mFirebaseAuth.currentUser!!.uid)
                             .set(newUser);
                     }else{
-                        FirebaseFirestore.getInstance().collection("users").document(MyApplication.userInsideId)
+                        db.collection("users").document(MyApplication.userInsideId)
                             .set(newUser);
                     }
                     Toast.makeText(this@StudentRegisterActivity,"$edit_message", Toast.LENGTH_LONG).show()
@@ -186,7 +183,7 @@ class StudentRegisterActivity : AppCompatActivity() {
                     startActivity(intent2);
                 }
             }
-            mFirebaseAuth!!.createUserWithEmailAndPassword(emailStr,passwordStr).addOnFailureListener() {
+            mFirebaseAuth.createUserWithEmailAndPassword(emailStr,passwordStr).addOnFailureListener {
 
 
                 val builder = AlertDialog.Builder(this)
@@ -202,23 +199,21 @@ class StudentRegisterActivity : AppCompatActivity() {
 
                 builder.show()
 
-
             }
-            }else{
-                mFirebaseAuth!!.currentUser!!.updateEmail(emailStr)
-                mFirebaseAuth!!.currentUser!!.updatePassword(passwordStr)
+            }
+            else{
+                mFirebaseAuth.currentUser!!.updateEmail(emailStr)
+                mFirebaseAuth.currentUser!!.updatePassword(passwordStr)
                 var newUser: User = User(nameStr,emailStr,1,"")
-                FirebaseFirestore.getInstance().collection("users").document(MyApplication.userInsideId)
-                    .set(newUser);
+                db.collection("users").document(MyApplication.userInsideId)
+                    .set(newUser)
                 Toast.makeText(this@StudentRegisterActivity,"$edit_message", Toast.LENGTH_LONG).show()
                 MyApplication.userInsideId=""
                 val intent2 = Intent(this@StudentRegisterActivity, LoginActivity::class.java);
-                startActivity(intent2);
-
+                startActivity(intent2)
 
             }
         }
-
     }
 
     private fun isEmailValid(email: String): Boolean {
