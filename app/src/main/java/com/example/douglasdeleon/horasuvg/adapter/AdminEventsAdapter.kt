@@ -14,6 +14,7 @@ import android.widget.Toast
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.R
+import com.google.firebase.firestore.FirebaseFirestore
 
 class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): RecyclerView.Adapter<AdminEventsAdapter.ViewHolder>(){
 
@@ -38,18 +39,30 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
 
+        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+
         fun bindItems(data: Event){
             val title: TextView =itemView.findViewById(R.id.text_view_title)
             val date: TextView =itemView.findViewById(R.id.text_view_date)
             val description: TextView =itemView.findViewById(R.id.text_view_description)
-            val button: Button =itemView.findViewById(R.id.editButton)
+            val button1: Button =itemView.findViewById(R.id.seeButton)
+            val button2: Button =itemView.findViewById(R.id.editButton)
+            val button3: Button =itemView.findViewById(R.id.deleteButton)
 
             title.text=data.name
             date.text=data.date
             description.text=data.description
 
-            button.setOnClickListener {
+            button1.setOnClickListener {
 
+            }
+
+            button2.setOnClickListener {
+
+            }
+
+            button3.setOnClickListener {
+                db.collection("events").document().get()
             }
         }
     }
