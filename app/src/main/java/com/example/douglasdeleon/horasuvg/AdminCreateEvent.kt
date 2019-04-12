@@ -56,25 +56,7 @@ class AdminCreateEvent: Fragment() {
             buttonCreate.text= "Actualizar"
         }
         dateButton = view.findViewById(R.id.dateButton)
-        if(MyApplication.eventCheckId!=""){
-            title.text = "Ver Evento"
-            activity!!.title = "Ver Evento"
-            buttonCreate.visibility = View.INVISIBLE;
-            dateButton.visibility = View.INVISIBLE
-            name_editText.text = Editable.Factory.getInstance().newEditable("Actividad: "+MyApplication.eventCheck.name)
-            description_editText.text = Editable.Factory.getInstance().newEditable("Descripcion: "+MyApplication.eventCheck.description)
-            place_editText.text = Editable.Factory.getInstance().newEditable("Lugar: " +MyApplication.eventCheck.place)
-            date_editText.text = Editable.Factory.getInstance().newEditable("Fecha: " +MyApplication.eventCheck.date)
-            volunteers_editText.text = Editable.Factory.getInstance().newEditable("Voluntarios: " +MyApplication.eventCheck.volunteers)
-            hours_editText.text = Editable.Factory.getInstance().newEditable("Horas: " +MyApplication.eventCheck.hours)
-            volunteers_editText.isEnabled = false;
-            date_editText.isEnabled =false;
-            name_editText.isEnabled = false;
-            description_editText.isEnabled = false;
-            place_editText.isEnabled =false;
-            hours_editText.isEnabled =false;
 
-        }
         buttonCreate.setOnClickListener {
             createEvent()
         }
@@ -105,6 +87,26 @@ class AdminCreateEvent: Fragment() {
             months3.add(Calendar.MONTH,3)
             datePicker.datePicker.maxDate= months3.timeInMillis
             datePicker.show()
+        }
+        if(MyApplication.eventCheckId!=""){
+            var now= System.currentTimeMillis() -1000;
+            title.text = "Ver Evento"
+            activity!!.title = "Ver Evento"
+            buttonCreate.visibility = View.INVISIBLE;
+            dateButton.visibility = View.INVISIBLE
+            name_editText.text = Editable.Factory.getInstance().newEditable("Actividad: "+MyApplication.eventCheck.name)
+            description_editText.text = Editable.Factory.getInstance().newEditable("Descripcion: "+MyApplication.eventCheck.description)
+            place_editText.text = Editable.Factory.getInstance().newEditable("Lugar: " +MyApplication.eventCheck.place)
+            date_editText.text = Editable.Factory.getInstance().newEditable("Fecha: " +MyApplication.eventCheck.date)
+            volunteers_editText.text = Editable.Factory.getInstance().newEditable("Voluntarios: " +MyApplication.eventCheck.volunteers)
+            hours_editText.text = Editable.Factory.getInstance().newEditable("Horas: " +MyApplication.eventCheck.hours)
+            volunteers_editText.isEnabled = false;
+            date_editText.isEnabled =false;
+            name_editText.isEnabled = false;
+            description_editText.isEnabled = false;
+            place_editText.isEnabled =false;
+            hours_editText.isEnabled =false;
+           
         }
     }
 
