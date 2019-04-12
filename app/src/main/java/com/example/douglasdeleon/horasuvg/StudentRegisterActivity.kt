@@ -190,7 +190,7 @@ class StudentRegisterActivity : AppCompatActivity() {
                     if(imgUpload==true) {
                         var uploadTask = ref.putFile(photoUri)
                     }
-                    var newUser: User = User(nameStr,emailStr,1,mFirebaseAuth.currentUser!!.uid.toString())
+                    var newUser: User = User(nameStr,emailStr,1,0,mFirebaseAuth.currentUser!!.uid.toString())
                     // ImageView in your Activity
 
 
@@ -228,7 +228,7 @@ class StudentRegisterActivity : AppCompatActivity() {
             else{
                 mFirebaseAuth.currentUser!!.updateEmail(emailStr)
                 mFirebaseAuth.currentUser!!.updatePassword(passwordStr)
-                var newUser: User = User(nameStr,emailStr,1,MyApplication.userInsideId)
+                var newUser: User = User(nameStr,emailStr,1,0,MyApplication.userInsideId)
                 db.collection("users").document(MyApplication.userInsideId)
                     .set(newUser)
                 val storage = FirebaseStorage.getInstance("gs://proyectoapp-add00.appspot.com")

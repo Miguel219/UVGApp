@@ -48,7 +48,7 @@ class StudentsInEventAdapter(var context: Context, var list: ArrayList<User>): R
             email.text=data.email
 
             button.setOnClickListener {
-                db.collection("userevents").whereEqualTo("userId",data.name).whereEqualTo("eventId",MyApplication.selectedEvent.eventId).get()
+                db.collection("userevents").whereEqualTo("userId",data.userId).whereEqualTo("eventId",MyApplication.selectedEvent.eventId).get()
                     .addOnSuccessListener { documentSnapshot ->
 
                     }
