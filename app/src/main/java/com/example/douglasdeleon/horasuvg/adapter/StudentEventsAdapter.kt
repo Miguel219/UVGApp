@@ -54,22 +54,24 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
             date.text=data.date
             description.text=data.description
 
-            if(data.assigned){
+            if(data.assigned) {
                 button.text = "Asignado"
                 button.setBackgroundColor(Color.WHITE)
-                button.setOnClickListener {
-                    db.collection("userevents").whereEqualTo("eventId",data.eventId).get()
+            }
+
+            button.setOnClickListener {
+                if(data.assigned) {
+                    db.collection("userevents").whereEqualTo("userId",MyApplication.userInsideId).whereEqualTo("eventId",data.eventId).get()
                         .addOnSuccessListener { documentSnapshot ->
                             documentSnapshot.forEach {
                                 it.reference.delete().addOnSuccessListener {
                                     button.text = "Asignarse"
                                     button.setBackgroundColor(Color.parseColor("#FF05EA28"))
+                                    data.assigned = false
                                 }
                             }
                         }
-                }
-            } else {
-                button.setOnClickListener {
+                } else{
                     val relation = HashMap<String, String>()
                     relation.put("userId", MyApplication.userInsideId)
                     relation.put("eventId", data.eventId)
@@ -78,6 +80,7 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
                         .set(relation as Map<String, Any>).addOnSuccessListener {
                             button.text = "Asignado"
                             button.setBackgroundColor(Color.WHITE)
+                            data.assigned = true
                         }
                 }
             }
