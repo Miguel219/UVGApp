@@ -74,9 +74,11 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
                         .addOnSuccessListener { documentSnapshot ->
                             documentSnapshot.forEach {
                                 it.reference.delete().addOnSuccessListener {
-                                    button.text = "Asignarse"
+
                                     button.setBackgroundColor(Color.parseColor("#FF05EA28"))
                                     data.assigned = false
+                                    button.text = "Asignarse"
+
                                 }
                             }
                         }
@@ -91,6 +93,7 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
                             button.text = "Asignado"
                             button.setBackgroundColor(Color.WHITE)
                             data.assigned = true
+
                         }
                 }
             }

@@ -170,7 +170,7 @@ class AdminCreateEvent: Fragment() {
                 newEvent.put("date", dateStr)
                 newEvent.put("hours", hours)
                 newEvent.put("volunteers", volunteers)
-                newEvent.put("cupo", hours)
+                newEvent.put("cupo", volunteers)
 
                 var doc = FirebaseFirestore.getInstance().collection("events").document()
                 newEvent.put("eventId", doc.id)
@@ -197,7 +197,7 @@ class AdminCreateEvent: Fragment() {
                 newEvent.put("date", dateStr)
                 newEvent.put("hours", hours)
                 newEvent.put("volunteers", volunteers)
-                newEvent.put("cupo", hours)
+                newEvent.put("cupo", volunteers)
 
                 var doc = FirebaseFirestore.getInstance().collection("events").document(MyApplication.editEventId)
                 newEvent.put("eventId", doc.id)
