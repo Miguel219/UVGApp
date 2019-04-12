@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
+import com.example.douglasdeleon.horasuvg.Model.User
 import com.example.douglasdeleon.horasuvg.adapter.StudentEventsAdapter
 import com.example.douglasdeleon.horasuvg.adapter.StudentsInEventAdapter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,19 +35,19 @@ class StudentsInEventActivity : Fragment() {
 
         recyclerStudentsInEvent.layoutManager= LinearLayoutManager(thisContext, LinearLayout.VERTICAL,false)
 
-        MyApplication.eventsList = ArrayList<Event>()
-        var adapter = StudentsInEventAdapter(thisContext!!, MyApplication.eventsList)
+        MyApplication.studentsInEventList = ArrayList<User>()
+        var adapter = StudentsInEventAdapter(thisContext!!, MyApplication.studentsInEventList)
         adapter.notifyDataSetChanged()
         recyclerStudentsInEvent.adapter = adapter
-        db.collection("events").get()
+        db.collection("userevents").whereEqualTo("eventId",MyApplication.selectedEvent.eventId).get()
             .addOnSuccessListener { documentSnapshot ->
                 documentSnapshot.forEach {
-                    var event: Event = it.toObject(Event::class.java)!!
+                    var userId = it.get("userId")
 
-                    db.collection("userevents").whereEqualTo("userId", MyApplication.userInsideId).whereEqualTo("eventId",it.id).get()
+                    db.collection("user").document(userId as String).get()
                         .addOnSuccessListener { documentSnapshot ->
-                            event.assigned = !documentSnapshot.isEmpty
-                            MyApplication.eventsList.add(event)
+                            var user: User = documentSnapshot.toObject(User::class.java)!!
+                            MyApplication.studentsInEventList.add(user)
                             recyclerStudentsInEvent.adapter = adapter
                         }
                 }

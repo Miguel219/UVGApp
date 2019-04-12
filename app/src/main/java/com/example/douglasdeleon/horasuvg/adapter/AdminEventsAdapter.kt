@@ -60,7 +60,7 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
             description.text=data.description
 
             button1.setOnClickListener {
-
+                MyApplication.selectedEvent = data
             }
 
             button2.setOnClickListener {

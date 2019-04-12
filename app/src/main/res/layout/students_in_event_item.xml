@@ -23,16 +23,6 @@
                 android:text="Title" android:textSize="18sp"/>
 
         <TextView
-                android:id="@+id/text_view_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="8dp"
-                android:layout_toEndOf="@id/text_view_title"
-                android:text="Date"/>
-
-        <TextView
                 android:id="@+id/text_view_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
