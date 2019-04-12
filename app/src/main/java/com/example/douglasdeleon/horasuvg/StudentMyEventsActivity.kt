@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_admin_events.*
 import kotlinx.android.synthetic.main.activity_student_events.*
 
-class StudentEventsActivity : Fragment() {
+class StudentMyEventsActivity : Fragment() {
 
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     var thisContext: Context? = null
@@ -31,7 +31,7 @@ class StudentEventsActivity : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        activity!!.title = "Actividades"
+        activity!!.title = "Mis Actividades"
 
         recyclerStudentEvents.layoutManager= LinearLayoutManager(thisContext, LinearLayout.VERTICAL,false)
 
@@ -47,7 +47,9 @@ class StudentEventsActivity : Fragment() {
                     db.collection("userevents").whereEqualTo("userId",MyApplication.userInsideId).whereEqualTo("eventId",it.id).get()
                         .addOnSuccessListener { documentSnapshot ->
                             event.assigned = !documentSnapshot.isEmpty
-                            MyApplication.eventsList.add(event)
+                            if(!documentSnapshot.isEmpty) {
+                                MyApplication.eventsList.add(event)
+                            }
                             recyclerStudentEvents.adapter = adapter
                         }
                 }
