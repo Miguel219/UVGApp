@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.Model.User
 import com.example.douglasdeleon.horasuvg.R
+import com.google.firebase.firestore.FirebaseFirestore
 
 class StudentsInEventAdapter(var context: Context, var list: ArrayList<User>): RecyclerView.Adapter<StudentsInEventAdapter.ViewHolder>(){
 
@@ -34,13 +36,23 @@ class StudentsInEventAdapter(var context: Context, var list: ArrayList<User>): R
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
 
+        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+
+
         fun bindItems(data: User){
             val title: TextView =itemView.findViewById(R.id.text_view_title)
             val email: TextView =itemView.findViewById(R.id.text_view_description)
-            val button: TextView =itemView.findViewById(R.id.assignedButton)
+            val button: Button =itemView.findViewById(R.id.assignedButton)
 
             title.text=data.name
             email.text=data.email
+
+            button.setOnClickListener {
+                db.collection("userevents").whereEqualTo("userId",data.name).whereEqualTo("eventId",MyApplication.selectedEvent.eventId).get()
+                    .addOnSuccessListener { documentSnapshot ->
+
+                    }
+            }
         }
     }
 

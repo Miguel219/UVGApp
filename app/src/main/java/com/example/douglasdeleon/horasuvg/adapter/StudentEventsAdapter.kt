@@ -75,6 +75,7 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
                     val relation = HashMap<String, String>()
                     relation.put("userId", MyApplication.userInsideId)
                     relation.put("eventId", data.eventId)
+                    relation.put("status", "0")
 
                     FirebaseFirestore.getInstance().collection("userevents").document()
                         .set(relation as Map<String, Any>).addOnSuccessListener {

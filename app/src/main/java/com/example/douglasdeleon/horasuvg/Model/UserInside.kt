@@ -4,6 +4,7 @@ package com.example.douglasdeleon.horasuvg.Model
       var name:String = "Name"
       var email:String = "Email"
       var type:Int = 0
+      var hours:Int = 0
       var img:String =""
     constructor(){}
 

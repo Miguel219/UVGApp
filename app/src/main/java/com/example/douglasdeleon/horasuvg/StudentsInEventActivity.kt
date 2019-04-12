@@ -44,11 +44,14 @@ class StudentsInEventActivity : Fragment() {
                 documentSnapshot.forEach {
                     var userId = it.get("userId")
 
-                    db.collection("user").document(userId as String).get()
+                    db.collection("users").document(userId as String).get()
                         .addOnSuccessListener { documentSnapshot ->
-                            var user: User = documentSnapshot.toObject(User::class.java)!!
-                            MyApplication.studentsInEventList.add(user)
-                            recyclerStudentsInEvent.adapter = adapter
+                            if (!documentSnapshot.data.isNullOrEmpty()) {
+                                var user: User = documentSnapshot.toObject(User::class.java)!!
+                                if(user.type == 1)
+                                MyApplication.studentsInEventList.add(user)
+                                recyclerStudentsInEvent.adapter = adapter
+                            }
                         }
                 }
             }
