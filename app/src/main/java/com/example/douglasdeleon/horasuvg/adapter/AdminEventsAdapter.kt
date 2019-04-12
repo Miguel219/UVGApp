@@ -2,6 +2,8 @@ package com.example.douglasdeleon.horasuvg.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.util.EventLog
 import android.view.LayoutInflater
@@ -11,9 +13,13 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.douglasdeleon.horasuvg.AdminCreateEvent
+import com.example.douglasdeleon.horasuvg.AdminEventsActivity
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
+import com.example.douglasdeleon.horasuvg.Model.UserInside
 import com.example.douglasdeleon.horasuvg.R
+import com.example.douglasdeleon.horasuvg.Start
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): RecyclerView.Adapter<AdminEventsAdapter.ViewHolder>(){
@@ -58,6 +64,13 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
             }
 
             button2.setOnClickListener {
+                db.collection("events").document(data.eventId).get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        MyApplication.eventEdit=documentSnapshot.toObject(Event::class.java)!!
+                        MyApplication.editEventId = data.eventId
+
+                        
+                    }
 
             }
 
@@ -65,8 +78,9 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
                 db.collection("events").document(data.eventId).get()
                     .addOnSuccessListener { documentSnapshot ->
                         documentSnapshot.reference.delete()
+
                     }
-                
+
             }
         }
     }
