@@ -55,6 +55,26 @@ class AdminCreateEvent: Fragment() {
             activity!!.title = "Editar Evento"
             buttonCreate.text= "Actualizar"
         }
+        dateButton = view.findViewById(R.id.dateButton)
+        if(MyApplication.eventCheckId!=""){
+            title.text = "Ver Evento"
+            activity!!.title = "Ver Evento"
+            buttonCreate.visibility = View.INVISIBLE;
+            dateButton.visibility = View.INVISIBLE
+            name_editText.text = Editable.Factory.getInstance().newEditable("Actividad: "+MyApplication.eventCheck.name)
+            description_editText.text = Editable.Factory.getInstance().newEditable("Descripcion: "+MyApplication.eventCheck.description)
+            place_editText.text = Editable.Factory.getInstance().newEditable("Lugar: " +MyApplication.eventCheck.place)
+            date_editText.text = Editable.Factory.getInstance().newEditable("Fecha: " +MyApplication.eventCheck.date)
+            volunteers_editText.text = Editable.Factory.getInstance().newEditable("Voluntarios: " +MyApplication.eventCheck.volunteers)
+            hours_editText.text = Editable.Factory.getInstance().newEditable("Horas: " +MyApplication.eventCheck.hours)
+            volunteers_editText.isEnabled = false;
+            date_editText.isEnabled =false;
+            name_editText.isEnabled = false;
+            description_editText.isEnabled = false;
+            place_editText.isEnabled =false;
+            hours_editText.isEnabled =false;
+
+        }
         buttonCreate.setOnClickListener {
             createEvent()
         }
@@ -68,7 +88,7 @@ class AdminCreateEvent: Fragment() {
             volunteers_editText.isEnabled = false;
             date_editText.isEnabled =false;
         }
-        dateButton = view.findViewById(R.id.dateButton)
+
         date = view.findViewById(R.id.date_editText)
         val calendar: Calendar = Calendar.getInstance()
 

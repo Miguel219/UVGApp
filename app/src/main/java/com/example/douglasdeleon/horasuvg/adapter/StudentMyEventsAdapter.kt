@@ -16,18 +16,19 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.douglasdeleon.horasuvg.AdminCreateEvent
+import com.example.douglasdeleon.horasuvg.AdminEventsActivity
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.R
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.HashMap
 
-class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): RecyclerView.Adapter<StudentEventsAdapter.ViewHolder>(){
+class StudentMyEventsAdapter (var context: Context, var list: ArrayList<Event>): RecyclerView.Adapter<StudentMyEventsAdapter.ViewHolder>(){
 
     var myContext: Context = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v= LayoutInflater.from(parent.context).inflate(R.layout.student_event_item,parent,false)
+        val v= LayoutInflater.from(parent.context).inflate(R.layout.student_myevent_item,parent,false)
         return ViewHolder(v)
     }
 
@@ -35,7 +36,7 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
         return list.size
     }
 
-    override fun onBindViewHolder(holder: StudentEventsAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: StudentMyEventsAdapter.ViewHolder, position: Int) {
         holder.bindItems(list[position])
         holder.itemView.setOnClickListener {
             MyApplication.eventCheck = MyApplication.eventsList.get(position)
@@ -67,32 +68,13 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
                 button.text = "Asignado"
                 button.setBackgroundColor(Color.WHITE)
             }
+            //if(data.status) {
+              //  button.text = "Aprobado"
+               // button.setBackgroundColor(Color.GREEN)
+            //}
 
-            button.setOnClickListener {
-                if(data.assigned) {
-                    db.collection("userevents").whereEqualTo("userId",MyApplication.userInsideId).whereEqualTo("eventId",data.eventId).get()
-                        .addOnSuccessListener { documentSnapshot ->
-                            documentSnapshot.forEach {
-                                it.reference.delete().addOnSuccessListener {
-                                    button.text = "Asignarse"
-                                    button.setBackgroundColor(Color.parseColor("#FF05EA28"))
-                                    data.assigned = false
-                                }
-                            }
-                        }
-                } else{
-                    val relation = HashMap<String, String>()
-                    relation.put("userId", MyApplication.userInsideId)
-                    relation.put("eventId", data.eventId)
 
-                    FirebaseFirestore.getInstance().collection("userevents").document()
-                        .set(relation as Map<String, Any>).addOnSuccessListener {
-                            button.text = "Asignado"
-                            button.setBackgroundColor(Color.WHITE)
-                            data.assigned = true
-                        }
-                }
-            }
+
         }
     }
 

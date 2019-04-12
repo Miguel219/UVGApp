@@ -13,6 +13,7 @@ import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.adapter.AdminEventsAdapter
 import com.example.douglasdeleon.horasuvg.adapter.StudentEventsAdapter
+import com.example.douglasdeleon.horasuvg.adapter.StudentMyEventsAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_admin_events.*
 import kotlinx.android.synthetic.main.activity_student_events.*
@@ -25,7 +26,7 @@ class StudentMyEventsActivity : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         thisContext = container!!.context
-        return inflater.inflate(com.example.douglasdeleon.horasuvg.R.layout.activity_student_events, container, false)
+        return inflater.inflate(com.example.douglasdeleon.horasuvg.R.layout.activity_student_myevents, container, false)
 
     }
 
@@ -36,7 +37,7 @@ class StudentMyEventsActivity : Fragment() {
         recyclerStudentEvents.layoutManager= LinearLayoutManager(thisContext, LinearLayout.VERTICAL,false)
 
         MyApplication.eventsList = ArrayList<Event>()
-        var adapter = StudentEventsAdapter(thisContext!!, MyApplication.eventsList)
+        var adapter = StudentMyEventsAdapter(thisContext!!, MyApplication.eventsList)
         adapter.notifyDataSetChanged()
         recyclerStudentEvents.adapter = adapter
         db.collection("events").get()
@@ -47,6 +48,7 @@ class StudentMyEventsActivity : Fragment() {
                     db.collection("userevents").whereEqualTo("userId",MyApplication.userInsideId).whereEqualTo("eventId",it.id).get()
                         .addOnSuccessListener { documentSnapshot ->
                             event.assigned = !documentSnapshot.isEmpty
+                            //event.status = documentSnapshot.
                             if(!documentSnapshot.isEmpty) {
                                 MyApplication.eventsList.add(event)
                             }
