@@ -45,9 +45,11 @@ class AdminEventsActivity : Fragment() {
 
                     db.collection("events").document(eventId as String).get()
                         .addOnSuccessListener { documentSnapshot ->
-                            var event:Event = documentSnapshot.toObject(Event::class.java)!!
-                            MyApplication.eventsList.add(event)
-                            recyclerAdminEvents.adapter = adapter
+                            if(!documentSnapshot.data.isNullOrEmpty()) {
+                                var event: Event = documentSnapshot.toObject(Event::class.java)!!
+                                MyApplication.eventsList.add(event)
+                                recyclerAdminEvents.adapter = adapter
+                            }
                         }
                 }
             }

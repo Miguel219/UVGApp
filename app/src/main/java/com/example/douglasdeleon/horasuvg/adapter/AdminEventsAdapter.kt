@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.EventLog
 import android.view.LayoutInflater
@@ -13,18 +14,19 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import com.example.douglasdeleon.horasuvg.AdminCreateEvent
-import com.example.douglasdeleon.horasuvg.AdminEventsActivity
+import com.example.douglasdeleon.horasuvg.*
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.Model.UserInside
-import com.example.douglasdeleon.horasuvg.R
-import com.example.douglasdeleon.horasuvg.Start
 import com.google.firebase.firestore.FirebaseFirestore
+
+
+
+
 
 class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): RecyclerView.Adapter<AdminEventsAdapter.ViewHolder>(){
 
-    var myContext: Context = context
+    public var myContext: Context = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v= LayoutInflater.from(parent.context).inflate(R.layout.admin_event_item,parent,false)
@@ -61,6 +63,12 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
 
             button1.setOnClickListener {
                 MyApplication.selectedEvent = data
+                var fragment:Fragment = StudentsInEventActivity();
+
+                val activity = it.context as AppCompatActivity
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
             }
 
             button2.setOnClickListener {
@@ -68,8 +76,13 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
                     .addOnSuccessListener { documentSnapshot ->
                         MyApplication.eventEdit=documentSnapshot.toObject(Event::class.java)!!
                         MyApplication.editEventId = data.eventId
+                        var fragment:Fragment = AdminCreateEvent();
 
-                        
+                        val activity = it.context as AppCompatActivity
+                        activity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.content_frame, fragment)
+                            .commit()
+
                     }
 
             }
@@ -78,7 +91,12 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
                 db.collection("events").document(data.eventId).get()
                     .addOnSuccessListener { documentSnapshot ->
                         documentSnapshot.reference.delete()
+                        var fragment:Fragment = AdminEventsActivity();
 
+                        val activity = it.context as AppCompatActivity
+                        activity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.content_frame, fragment)
+                            .commit()
                     }
 
             }
