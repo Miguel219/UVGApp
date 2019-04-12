@@ -19,5 +19,6 @@ internal class MyApplication : Application() {
         lateinit var userInside:UserInside
         var eventsList: ArrayList<Event> = ArrayList<Event>()
         var selectedEvent: Event = Event()
+        lateinit var myContext: Context
     }
 }

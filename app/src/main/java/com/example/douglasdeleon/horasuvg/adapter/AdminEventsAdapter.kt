@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.douglasdeleon.horasuvg.EditEventActivity
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.R
@@ -41,10 +43,15 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
             val title: TextView =itemView.findViewById(R.id.text_view_title)
             val date: TextView =itemView.findViewById(R.id.text_view_date)
             val description: TextView =itemView.findViewById(R.id.text_view_description)
+            val button: Button =itemView.findViewById(R.id.editButton)
 
             title.text=data.name
             date.text=data.date
             description.text=data.description
+
+            button.setOnClickListener {
+
+            }
         }
     }
 

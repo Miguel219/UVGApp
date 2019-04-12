@@ -17,25 +17,31 @@
             android:roundIcon="@mipmap/uvglogo"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-             See README(https://goo.gl/l4GJaQ) for more. -->
+
+        <!--
+             Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
-                android:resource="@mipmap/uvgl" />
+                android:resource="@mipmap/uvgl"/>
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_largeIcon"
-                android:resource="@mipmap/uvgl" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+                android:resource="@mipmap/uvgl"/>
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorPrimary" />
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/colorPrimary"/>
         <meta-data
                 android:name="firebase_messaging_auto_init_enabled"
-                android:value="false" />
+                android:value="false"/>
         <meta-data
                 android:name="firebase_analytics_collection_enabled"
-                android:value="false" />
+                android:value="false"/>
+
         <activity
                 android:name=".LoggedIn"
                 android:label="HorasUVG"
@@ -56,7 +62,6 @@
         </activity>
         <activity android:name=".StudentRegisterActivity">
         </activity>
-
         <activity
                 android:name=".LoggedInStudent"
                 android:label="HorasUVG"
@@ -67,11 +72,15 @@
                 android:label="HorasUVG"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
         <service android:name=".Model.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+
+        <activity android:name=".EditEventActivity">
+        </activity>
     </application>
 
 </manifest>

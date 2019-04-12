@@ -33,7 +33,7 @@ class LoggedInStudent : AppCompatActivity(), NavigationView.OnNavigationItemSele
         setContentView(R.layout.activity_logged_in_student)
         setSupportActionBar(toolbar)
 
-
+        MyApplication.myContext = this
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
