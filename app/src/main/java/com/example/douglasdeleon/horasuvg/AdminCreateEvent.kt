@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,9 @@ import android.widget.Button
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
+import kotlinx.android.synthetic.main.activity_student_register.*
 import kotlinx.android.synthetic.main.admin_create_event.*
 import java.util.*
 
@@ -29,11 +33,15 @@ class AdminCreateEvent: Fragment() {
     lateinit var dateButton: Button
     lateinit var date: TextView
     lateinit var datePicker: DatePickerDialog
+    var edit =false;
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         //returning our layout file
         //change R.layout.yourlayoutfilename for each of your fragments
         thisContext = container!!.context
+        if(MyApplication.editEventId!=""){
+            edit=true;
+        }
         return inflater.inflate(com.example.douglasdeleon.horasuvg.R.layout.admin_create_event, container, false)
     }
 
@@ -68,12 +76,23 @@ class AdminCreateEvent: Fragment() {
     }
 
     private fun createEvent(){
+
         val nameStr = name_editText.text.toString()
         val descriptionStr = description_editText.text.toString()
         val placeStr = place_editText.text.toString()
         val dateStr = date_editText.text.toString()
         val volunteers = volunteers_editText.text.toString()
         val hours = hours_editText.text.toString()
+        if(edit==true){
+            name_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.name)
+            description_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.description)
+            place_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.place)
+            date_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.date)
+            volunteers_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.volunteers)
+            hours_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.hours)
+            volunteers_editText.isEnabled = false;
+            date_editText.isEnabled =false;
+        }
         var cancel = false
         var message = ""
 
@@ -115,28 +134,34 @@ class AdminCreateEvent: Fragment() {
 
         } else {
 
-            val newEvent = HashMap<String, String>()
-            newEvent.put("adminId", MyApplication.userInsideId)
-            newEvent.put("name", nameStr)
-            newEvent.put("description", descriptionStr)
-            newEvent.put("place", placeStr)
-            newEvent.put("date", dateStr)
-            newEvent.put("hours", hours)
-            newEvent.put("volunteers", volunteers)
-            newEvent.put("cupo", hours)
-            var doc = FirebaseFirestore.getInstance().collection("events").document()
-            doc.set(newEvent as Map<String, Any>).addOnCompleteListener {
-                val relation = HashMap<String, String>()
-                relation.put("userId", MyApplication.userInsideId)
-                relation.put("eventId", doc.id)
-                FirebaseFirestore.getInstance().collection("userevents").document().set(relation as Map<String, Any>)
+            if(edit==false) {
 
-                var fragmentManager: FragmentManager = fragmentManager!!
-                var fragment: Fragment = Start()
-                fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit()
-                Toast.makeText(thisContext, "Se ha creado el evento correctamente", Toast.LENGTH_LONG).show()
+                val newEvent = HashMap<String, String>()
+                newEvent.put("adminId", MyApplication.userInsideId)
+                newEvent.put("name", nameStr)
+                newEvent.put("description", descriptionStr)
+                newEvent.put("place", placeStr)
+                newEvent.put("date", dateStr)
+                newEvent.put("hours", hours)
+                newEvent.put("volunteers", volunteers)
+                newEvent.put("cupo", hours)
+
+                var doc = FirebaseFirestore.getInstance().collection("events").document()
+                newEvent.put("id", doc.id)
+                doc.set(newEvent as Map<String, Any>).addOnCompleteListener {
+                    val relation = HashMap<String, String>()
+                    relation.put("userId", MyApplication.userInsideId)
+                    relation.put("eventId", doc.id)
+
+                    FirebaseFirestore.getInstance().collection("userevents").document()
+                        .set(relation as Map<String, Any>)
+                    var fragmentManager: FragmentManager = fragmentManager!!
+                    var fragment: Fragment = Start()
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .commit()
+                    Toast.makeText(thisContext, "Se ha creado el evento correctamente", Toast.LENGTH_LONG).show()
+                }
             }
         }
 
