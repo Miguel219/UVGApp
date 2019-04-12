@@ -81,6 +81,8 @@
 
         <activity android:name=".EditEventActivity">
         </activity>
+        <activity android:name=".StudentsInEventActivity">
+        </activity>
     </application>
 
 </manifest>
