@@ -62,7 +62,11 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
             }
 
             button3.setOnClickListener {
-                db.collection("events").document().get()
+                db.collection("events").document(data.eventId).get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        documentSnapshot.reference.delete()
+                    }
+                
             }
         }
     }
