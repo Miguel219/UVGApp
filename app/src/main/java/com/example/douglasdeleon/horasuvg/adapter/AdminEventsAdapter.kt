@@ -11,7 +11,6 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import com.example.douglasdeleon.horasuvg.EditEventActivity
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.R
