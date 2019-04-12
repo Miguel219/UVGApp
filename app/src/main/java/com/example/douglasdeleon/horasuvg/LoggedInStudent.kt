@@ -58,7 +58,7 @@ class LoggedInStudent : AppCompatActivity(), NavigationView.OnNavigationItemSele
             .load(url)
             .into(imageText)
 
-        var fragment: Fragment = Start()
+        var fragment: Fragment = HourControl()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.content_frame, fragment)
