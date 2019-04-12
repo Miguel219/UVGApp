@@ -100,7 +100,13 @@ class LoggedInStudent : AppCompatActivity(), NavigationView.OnNavigationItemSele
                     .replace(R.id.content_frame, fragment)
                     .commit()
             }
-
+            R.id.nav_my_activities -> {
+                var fragment: Fragment = StudentMyEventsActivity()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
+            }
             R.id.nav_logout -> {
                 MyApplication.userInsideId= ""
                 val intent: Intent = Intent(this, LoginActivity::class.java);

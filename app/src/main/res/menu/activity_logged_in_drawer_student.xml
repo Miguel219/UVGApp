@@ -12,6 +12,10 @@
                 android:id="@+id/nav_activities"
                 android:icon="@drawable/checklist"
                 android:title="Actividades"/>
+        <item
+                android:id="@+id/nav_my_activities"
+                android:icon="@drawable/checklist"
+                android:title="Mis Actividades"/>
 
 
     </group>
