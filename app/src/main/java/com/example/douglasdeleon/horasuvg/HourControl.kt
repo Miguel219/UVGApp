@@ -36,7 +36,10 @@ class HourControl: Fragment() {
                 var user: UserInside = documentSnapshot.toObject(UserInside::class.java)!!
                 MyApplication.userInside = user
                 hours.text = MyApplication.userInside.hours.toString();
+
             }
+        MyApplication.eventCheckId=""
+        MyApplication.editEventId=""
 
     }
 }

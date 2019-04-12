@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.google.firebase.auth.FirebaseAuth
 
 class Start: Fragment() {
@@ -25,6 +26,7 @@ class Start: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //you can set the title for your toolbar here for different fragments different titles
         activity!!.title = "Inicio"
-
+        MyApplication.eventCheckId=""
+        MyApplication.editEventId=""
     }
 }
