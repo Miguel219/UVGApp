@@ -53,11 +53,21 @@ class AdminCreateEvent: Fragment() {
         if(MyApplication.editEventId!=""){
             title.text = "Editar Evento"
             activity!!.title = "Editar Evento"
+            buttonCreate.text= "Actualizar"
         }
         buttonCreate.setOnClickListener {
             createEvent()
         }
-
+        if(edit==true){
+            name_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.name)
+            description_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.description)
+            place_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.place)
+            date_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.date)
+            volunteers_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.volunteers)
+            hours_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.hours)
+            volunteers_editText.isEnabled = false;
+            date_editText.isEnabled =false;
+        }
         dateButton = view.findViewById(R.id.dateButton)
         date = view.findViewById(R.id.date_editText)
         val calendar: Calendar = Calendar.getInstance()
@@ -86,16 +96,7 @@ class AdminCreateEvent: Fragment() {
         val dateStr = date_editText.text.toString()
         val volunteers = volunteers_editText.text.toString()
         val hours = hours_editText.text.toString()
-        if(edit==true){
-            name_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.name)
-            description_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.description)
-            place_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.place)
-            date_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.date)
-            volunteers_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.volunteers)
-            hours_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.hours)
-            volunteers_editText.isEnabled = false;
-            date_editText.isEnabled =false;
-        }
+
         var cancel = false
         var message = ""
 
@@ -179,20 +180,16 @@ class AdminCreateEvent: Fragment() {
                 var doc = FirebaseFirestore.getInstance().collection("events").document(MyApplication.editEventId)
                 newEvent.put("eventId", doc.id)
                 doc.set(newEvent as Map<String, Any>).addOnCompleteListener {
-                    val relation = HashMap<String, String>()
-                    relation.put("userId", MyApplication.userInsideId)
-                    relation.put("eventId", doc.id)
 
-                    FirebaseFirestore.getInstance().collection("userevents").document()
-                        .set(relation as Map<String, Any>)
                     var fragmentManager: FragmentManager = fragmentManager!!
                     var fragment: Fragment = Start()
                     fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, fragment)
                         .commit()
                     Toast.makeText(thisContext, "Se ha editado el evento correctamente", Toast.LENGTH_LONG).show()
+                    MyApplication.editEventId = ""
                 }
-                MyApplication.editEventId = ""
+
 
             }
         }

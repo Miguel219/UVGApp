@@ -98,6 +98,7 @@ class LoggedInAdmin : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                     .commit()
             }
             R.id.nav_create_event -> {
+                MyApplication.editEventId = ""
                 var fragment: Fragment = AdminCreateEvent()
                 supportFragmentManager
                     .beginTransaction()
