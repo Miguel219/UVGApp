@@ -50,7 +50,10 @@ class AdminCreateEvent: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //you can set the title for your toolbar here for different fragments different titles
         activity!!.title = "Crear Evento"
-
+        if(MyApplication.editEventId!=""){
+            title.text = "Editar Evento"
+            activity!!.title = "Editar Evento"
+        }
         buttonCreate.setOnClickListener {
             createEvent()
         }
@@ -147,7 +150,7 @@ class AdminCreateEvent: Fragment() {
                 newEvent.put("cupo", hours)
 
                 var doc = FirebaseFirestore.getInstance().collection("events").document()
-                newEvent.put("id", doc.id)
+                newEvent.put("eventId", doc.id)
                 doc.set(newEvent as Map<String, Any>).addOnCompleteListener {
                     val relation = HashMap<String, String>()
                     relation.put("userId", MyApplication.userInsideId)
@@ -162,6 +165,35 @@ class AdminCreateEvent: Fragment() {
                         .commit()
                     Toast.makeText(thisContext, "Se ha creado el evento correctamente", Toast.LENGTH_LONG).show()
                 }
+            }else{
+                val newEvent = HashMap<String, String>()
+                newEvent.put("adminId", MyApplication.userInsideId)
+                newEvent.put("name", nameStr)
+                newEvent.put("description", descriptionStr)
+                newEvent.put("place", placeStr)
+                newEvent.put("date", dateStr)
+                newEvent.put("hours", hours)
+                newEvent.put("volunteers", volunteers)
+                newEvent.put("cupo", hours)
+
+                var doc = FirebaseFirestore.getInstance().collection("events").document(MyApplication.editEventId)
+                newEvent.put("eventId", doc.id)
+                doc.set(newEvent as Map<String, Any>).addOnCompleteListener {
+                    val relation = HashMap<String, String>()
+                    relation.put("userId", MyApplication.userInsideId)
+                    relation.put("eventId", doc.id)
+
+                    FirebaseFirestore.getInstance().collection("userevents").document()
+                        .set(relation as Map<String, Any>)
+                    var fragmentManager: FragmentManager = fragmentManager!!
+                    var fragment: Fragment = Start()
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .commit()
+                    Toast.makeText(thisContext, "Se ha editado el evento correctamente", Toast.LENGTH_LONG).show()
+                }
+                MyApplication.editEventId = ""
+
             }
         }
 
