@@ -106,7 +106,7 @@ class AdminCreateEvent: Fragment() {
             description_editText.isEnabled = false;
             place_editText.isEnabled =false;
             hours_editText.isEnabled =false;
-           
+
         }
     }
 
