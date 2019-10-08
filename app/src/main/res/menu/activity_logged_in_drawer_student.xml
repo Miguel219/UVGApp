@@ -4,18 +4,31 @@
       tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
+<!--        <item
                 android:id="@+id/nav_hours"
                 android:icon="@drawable/clock"
-                android:title="Control de Horas"/>
-        <item
-                android:id="@+id/nav_activities"
-                android:icon="@drawable/checklist"
-                android:title="Actividades"/>
-        <item
+                android:title="Control de Horas"/>-->
+
+        <!--<item
                 android:id="@+id/nav_my_activities"
                 android:icon="@drawable/checklist"
-                android:title="Mis Actividades"/>
+                android:title="Mis Actividades"/>-->
+        <item
+                android:id="@+id/nav_my_problems"
+                android:icon="@drawable/solve"
+                android:title="Mis Problemas"/>
+        <item
+                android:id="@+id/nav_my_problems_solved"
+                android:icon="@drawable/solved"
+                android:title="Mis Problemas Resueltos"/>
+        <item
+                android:id="@+id/nav_problems_solved"
+                android:icon="@drawable/solved"
+                android:title="Problemas Resueltos"/>
+        <item
+                android:id="@+id/nav_new_problem"
+                android:icon="@drawable/newproblem"
+                android:title="Nuevo Problema"/>
 
 
     </group>

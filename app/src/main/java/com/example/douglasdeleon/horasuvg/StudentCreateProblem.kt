@@ -1,33 +1,42 @@
-/*
 package com.example.douglasdeleon.horasuvg
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v7.widget.TooltipCompat
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
+import com.bumptech.glide.Glide
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
-import android.widget.Button
-import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_student_register.*
 import kotlinx.android.synthetic.main.admin_create_event.*
+import kotlinx.android.synthetic.main.student_create_problem.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 
 
-class AdminCreateEvent: Fragment() {
-
+class StudentCreateProblem: Fragment() {
+    val PICK_PHOTO_CODE = 1046
+    var imgUpload=false
+    lateinit var spinner: Spinner
+    lateinit var photoUri: Uri
     private var mFirebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     var thisContext: Context? = null
@@ -35,7 +44,8 @@ class AdminCreateEvent: Fragment() {
     lateinit var date: TextView
     lateinit var datePicker: DatePickerDialog
     var edit =false;
-
+    var imgEdit=false;
+    lateinit var imageText: ImageView;
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         //returning our layout file
         //change R.layout.yourlayoutfilename for each of your fragments
@@ -43,17 +53,17 @@ class AdminCreateEvent: Fragment() {
         if(MyApplication.editEventId!=""){
             edit=true;
         }
-        return inflater.inflate(com.example.douglasdeleon.horasuvg.R.layout.admin_create_event, container, false)
+        return inflater.inflate(com.example.douglasdeleon.horasuvg.R.layout.student_create_problem, container, false)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //you can set the title for your toolbar here for different fragments different titles
-        activity!!.title = "Crear Evento"
+        activity!!.title = "Nuevo Problema"
         if(MyApplication.editEventId!=""){
-            title.text = "Editar Evento"
-            activity!!.title = "Editar Evento"
+            title.text = "Editar Problema"
+            activity!!.title = "Editar Problema"
             buttonCreate.text= "Actualizar"
         }
         dateButton = view.findViewById(R.id.dateButton)
@@ -66,9 +76,6 @@ class AdminCreateEvent: Fragment() {
             description_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.description)
             class_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.place)
             date_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.date)
-            volunteers_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.volunteers)
-            hours_editText.text = Editable.Factory.getInstance().newEditable(MyApplication.eventEdit.hours)
-            volunteers_editText.isEnabled = false;
             date_editText.isEnabled =false;
         }
 
@@ -89,24 +96,59 @@ class AdminCreateEvent: Fragment() {
             datePicker.datePicker.maxDate= months3.timeInMillis
             datePicker.show()
         }
-        if(MyApplication.eventCheckId!=""){
+        if(MyApplication.problemCheckId!=""){
             var now= System.currentTimeMillis() -1000;
-            title.text = "Ver Evento"
-            activity!!.title = "Ver Evento"
+            title.text = "Ver Problema"
+            activity!!.title = "Ver Problema"
             buttonCreate.visibility = View.INVISIBLE;
             dateButton.visibility = View.INVISIBLE
-            name_editText.text = Editable.Factory.getInstance().newEditable("Actividad: "+MyApplication.eventCheck.name)
-            description_editText.text = Editable.Factory.getInstance().newEditable("Descripcion: "+MyApplication.eventCheck.description)
-            class_editText.text = Editable.Factory.getInstance().newEditable("Lugar: " +MyApplication.eventCheck.place)
-            date_editText.text = Editable.Factory.getInstance().newEditable("Fecha: " +MyApplication.eventCheck.date)
-            volunteers_editText.text = Editable.Factory.getInstance().newEditable("Voluntarios: " +MyApplication.eventCheck.volunteers)
-            hours_editText.text = Editable.Factory.getInstance().newEditable("Horas: " +MyApplication.eventCheck.hours)
-            volunteers_editText.isEnabled = false;
+            name_editText.text = Editable.Factory.getInstance().newEditable("Nombre: "+MyApplication.problemCheck.name)
+            description_editText.text = Editable.Factory.getInstance().newEditable("Descripcion: "+MyApplication.problemCheck.description)
+            class_editText.text = Editable.Factory.getInstance().newEditable("Clase: " +MyApplication.problemCheck.problemClass)
+            date_editText.text = Editable.Factory.getInstance().newEditable("Fecha: " +MyApplication.problemCheck.date)
             date_editText.isEnabled =false;
             name_editText.isEnabled = false;
             description_editText.isEnabled = false;
             class_editText.isEnabled =false;
-            hours_editText.isEnabled =false;
+            var url =
+                "https://firebasestorage.googleapis.com/v0/b/proyectoapp-add00.appspot.com/o/" + MyApplication.problemCheck.problemId.toString() + "?alt=media"
+            imgEdit=true
+            imageText= this.view!!.findViewById(R.id.problemImageUpload);
+            Glide.with(this@StudentCreateProblem)
+                .load(url)
+                .into(imageText)
+            MyApplication.problemCheckId ="";
+        }
+        var RESULT_LOAD_IMAGE:Int =1;
+        problemImageUpload.setOnClickListener {
+
+            val intent = Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            )
+
+            // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+            // So as long as the result is not null, it's safe to use the intent.
+            if (intent.resolveActivity(this.activity!!.packageManager) != null) {
+                // Bring up gallery to select a photo
+                startActivityForResult(intent, PICK_PHOTO_CODE)
+            }
+
+        }
+        TooltipCompat.setTooltipText(problemImageUpload, "Haz click para subir la imagen del problema.");
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        //https://github.com/codepath/android_guides/wiki/Accessing-the-Camera-and-Stored-Media
+        if (data != null) {
+            photoUri = data.data!!
+            imgUpload=true
+            // Do something with the photo based on Uri
+            var selectedImage: Bitmap = MediaStore.Images.Media.getBitmap(this.activity!!.contentResolver, photoUri);
+            // Load the selected image into a preview
+
+            problemImageUpload.setImageBitmap(selectedImage);
 
         }
     }
@@ -115,11 +157,11 @@ class AdminCreateEvent: Fragment() {
 
         val nameStr = name_editText.text.toString()
         val descriptionStr = description_editText.text.toString()
-        val placeStr = class_editText.text.toString()
-        val dateStr = date_editText.text.toString()
-        val volunteers = volunteers_editText.text.toString()
-        val hours = hours_editText.text.toString()
+        val classStr = class_editText.text.toString()
+        val dateStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
+
+        val solved = false;
         var cancel = false
         var message = ""
 
@@ -129,17 +171,11 @@ class AdminCreateEvent: Fragment() {
         }else if(descriptionStr==""){
             message="La descripción no puede estar vacía."
             cancel = true
-        }else if(placeStr==""){
-            message="El lugar no puede estar vacío."
+        }else if(classStr==""){
+            message="La clase no puede estar vacío."
             cancel = true
-        }else if(dateStr==""){
-            message="La fecha no puede estar vacía."
-            cancel = true
-        }else if(hours.toDouble()<=0){
-            message="Las horas deben ser mayores a 0."
-            cancel = true
-        }else if(volunteers.toDouble()<=0){
-            message="La cantidad de voluntarios debe ser mayor a 0."
+        }else if(imgUpload==false && imgEdit==false){
+            message="El problema debe tener una imagen."
             cancel = true
         }
 
@@ -163,53 +199,55 @@ class AdminCreateEvent: Fragment() {
 
             if(edit==false) {
 
-                val newEvent = HashMap<String, String>()
-                newEvent.put("adminId", MyApplication.userInsideId)
-                newEvent.put("name", nameStr)
-                newEvent.put("description", descriptionStr)
-                newEvent.put("place", placeStr)
-                newEvent.put("date", dateStr)
-                newEvent.put("hours", hours)
-                newEvent.put("volunteers", volunteers)
-                newEvent.put("cupo", volunteers)
+                val newProblem = HashMap<String, String>()
+                newProblem.put("userCreatedId", MyApplication.userInsideId)
+                newProblem.put("name", nameStr)
+                newProblem.put("description", descriptionStr)
+                newProblem.put("problemClass", classStr)
+                newProblem.put("date", dateStr)
+                newProblem.put("solved", "0")
 
-                var doc = FirebaseFirestore.getInstance().collection("events").document()
-                newEvent.put("eventId", doc.id)
-                doc.set(newEvent as Map<String, Any>).addOnCompleteListener {
+                var doc = FirebaseFirestore.getInstance().collection("problems").document()
+                newProblem.put("problemId", doc.id)
+                val storage = FirebaseStorage.getInstance("gs://proyectoapp-add00.appspot.com")
+                val ref=storage.reference.child(doc.id)
+                //SUBIR IMAGEN
+                if(imgUpload==true) {
+                    var uploadTask = ref.putFile(photoUri)
+                }
+                doc.set(newProblem as Map<String, Any>).addOnCompleteListener {
                     val relation = HashMap<String, String>()
                     relation.put("userId", MyApplication.userInsideId)
-                    relation.put("eventId", doc.id)
+                    relation.put("problemId", doc.id)
 
-                    FirebaseFirestore.getInstance().collection("userevents").document()
+                    FirebaseFirestore.getInstance().collection("userproblems").document()
                         .set(relation as Map<String, Any>)
                     var fragmentManager: FragmentManager = fragmentManager!!
-                    var fragment: Fragment = Start()
+                    var fragment: Fragment = StudentMyProblemsActivity()
                     fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, fragment)
                         .commit()
-                    Toast.makeText(thisContext, "Se ha creado el evento correctamente", Toast.LENGTH_LONG).show()
+                    Toast.makeText(thisContext, "Se ha creado el problema correctamente", Toast.LENGTH_LONG).show()
                 }
             }else{
-                val newEvent = HashMap<String, String>()
-                newEvent.put("adminId", MyApplication.userInsideId)
-                newEvent.put("name", nameStr)
-                newEvent.put("description", descriptionStr)
-                newEvent.put("place", placeStr)
-                newEvent.put("date", dateStr)
-                newEvent.put("hours", hours)
-                newEvent.put("volunteers", volunteers)
-                newEvent.put("cupo", volunteers)
+                val newProblem = HashMap<String, String>()
+                newProblem.put("userCreatedId", MyApplication.userInsideId)
+                newProblem.put("name", nameStr)
+                newProblem.put("description", descriptionStr)
+                newProblem.put("class", classStr)
+                newProblem.put("date", dateStr)
+                newProblem.put("solved", "0")
 
                 var doc = FirebaseFirestore.getInstance().collection("events").document(MyApplication.editEventId)
-                newEvent.put("eventId", doc.id)
-                doc.set(newEvent as Map<String, Any>).addOnCompleteListener {
+                newProblem.put("eventId", doc.id)
+                doc.set(newProblem as Map<String, Any>).addOnCompleteListener {
 
                     var fragmentManager: FragmentManager = fragmentManager!!
                     var fragment: Fragment = Start()
                     fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, fragment)
                         .commit()
-                    Toast.makeText(thisContext, "Se ha editado el evento correctamente", Toast.LENGTH_LONG).show()
+                    Toast.makeText(thisContext, "Se ha editado el problema correctamente", Toast.LENGTH_LONG).show()
                     MyApplication.editEventId = ""
                 }
 
@@ -218,4 +256,4 @@ class AdminCreateEvent: Fragment() {
         }
 
     }
-}*/
+}

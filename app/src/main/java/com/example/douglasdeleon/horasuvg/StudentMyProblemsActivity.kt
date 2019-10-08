@@ -19,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_admin_events.*
 import kotlinx.android.synthetic.main.activity_student_events.*
 
-class StudentMyEventsActivity : Fragment() {
+class StudentMyProblemsActivity : Fragment() {
 
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     var thisContext: Context? = null
@@ -27,7 +27,8 @@ class StudentMyEventsActivity : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         thisContext = container!!.context
-        return inflater.inflate(com.example.douglasdeleon.horasuvg.R.layout.activity_student_myevents, container, false)
+        return inflater.inflate(com.example.douglasdeleon.horasuvg.R.layout.activity_student_myproblems
+            , container, false)
 
     }
 

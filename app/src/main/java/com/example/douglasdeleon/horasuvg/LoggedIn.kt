@@ -104,13 +104,13 @@ class LoggedIn : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
                     .replace(R.id.content_frame, fragment)
                     .commit()
             }
-            R.id.nav_create_event -> {
+            /*R.id.nav_create_event -> {
                 var fragment: Fragment = AdminCreateEvent()
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit()
-            }
+            }*/
             R.id.nav_logout -> {
                 MyApplication.userInsideId= ""
                 val intent: Intent = Intent(this, LoginActivity::class.java);

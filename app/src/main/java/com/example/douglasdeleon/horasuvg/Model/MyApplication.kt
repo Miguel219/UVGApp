@@ -17,11 +17,17 @@ internal class MyApplication : Application() {
     companion object {
         var userInsideId:String =""
         lateinit var eventCheck:Event
+        lateinit var problemCheck:Problem
+        lateinit var solution:Problem
         var eventCheckId="";
+        var problemCheckId="";
+        var seeSolution = false;
+
         var editEventId:String =""
         lateinit var userInside:UserInside
         lateinit var eventEdit:Event
         var eventsList: ArrayList<Event> = ArrayList<Event>()
+        var problemList: ArrayList<Problem> = ArrayList<Problem>()
         var selectedEvent: Event = Event()
         var studentsInEventList: ArrayList<User> = ArrayList<User>()
         var selectedStudent:User  = User()

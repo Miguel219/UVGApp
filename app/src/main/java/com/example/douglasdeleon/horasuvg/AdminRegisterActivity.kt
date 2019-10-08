@@ -177,7 +177,7 @@ class AdminRegisterActivity : AppCompatActivity() {
                         var img =("gs://proyectoapp-add00.appspot.com/"+mFirebaseAuth.currentUser!!.uid.toString())
                         val storage = FirebaseStorage.getInstance("gs://proyectoapp-add00.appspot.com")
                         val ref=storage.reference.child(mFirebaseAuth.currentUser!!.uid.toString())
-                        var newUser: User = User(nameStr, emailStr, 2,0,ref.downloadUrl.toString())
+                        var newUser: User = User(nameStr, emailStr, 2,0,ref.downloadUrl.toString(),0)
                         if (MyApplication.userInsideId == "") {
                            db.collection("users")
                                 .document(mFirebaseAuth.currentUser!!.uid)
@@ -216,7 +216,7 @@ class AdminRegisterActivity : AppCompatActivity() {
             }else{
                 mFirebaseAuth.currentUser!!.updateEmail(emailStr)
                 mFirebaseAuth.currentUser!!.updatePassword(passwordStr)
-                var newUser: User = User(nameStr,emailStr,2,0,"")
+                var newUser: User = User(nameStr,emailStr,2,0,"",0)
                 db.collection("users").document(MyApplication.userInsideId)
                     .set(newUser)
                 val storage = FirebaseStorage.getInstance("gs://proyectoapp-add00.appspot.com")

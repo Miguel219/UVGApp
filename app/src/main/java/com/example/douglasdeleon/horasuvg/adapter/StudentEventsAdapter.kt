@@ -15,7 +15,7 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import com.example.douglasdeleon.horasuvg.AdminCreateEvent
+
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
 import com.example.douglasdeleon.horasuvg.R
@@ -37,7 +37,7 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
 
     override fun onBindViewHolder(holder: StudentEventsAdapter.ViewHolder, position: Int) {
         holder.bindItems(list[position])
-        holder.itemView.setOnClickListener {
+        /*holder.itemView.setOnClickListener {
             MyApplication.eventCheck = MyApplication.eventsList.get(position)
             MyApplication.eventCheckId = MyApplication.eventCheck.eventId;
             //Se cambia de pantalla
@@ -46,7 +46,7 @@ class StudentEventsAdapter (var context: Context, var list: ArrayList<Event>): R
             activity.supportFragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit()
-        }
+        }*/
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){

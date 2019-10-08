@@ -17,6 +17,7 @@ import android.widget.Toast
 import com.example.douglasdeleon.horasuvg.*
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
+import com.example.douglasdeleon.horasuvg.Model.Problem
 import com.example.douglasdeleon.horasuvg.Model.UserInside
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -24,12 +25,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 
 
-class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): RecyclerView.Adapter<AdminEventsAdapter.ViewHolder>(){
+class AdminEventsAdapter (var context: Context, var list: ArrayList<Problem>): RecyclerView.Adapter<AdminEventsAdapter.ViewHolder>(){
 
     public var myContext: Context = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v= LayoutInflater.from(parent.context).inflate(R.layout.admin_event_item,parent,false)
+        val v= LayoutInflater.from(parent.context).inflate(R.layout.adminevent_item,parent,false)
         return ViewHolder(v)
     }
 
@@ -40,8 +41,15 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
     override fun onBindViewHolder(holder: AdminEventsAdapter.ViewHolder, position: Int) {
         holder.bindItems(list[position])
         holder.itemView.setOnClickListener {
-            MyApplication.selectedEvent = MyApplication.eventsList.get(position)
+            MyApplication.problemCheck = MyApplication.problemList.get(position)
             //Se cambia de pantalla
+            MyApplication.problemCheckId = MyApplication.problemCheck.problemId;
+            //Se cambia de pantalla
+            var fragment: Fragment = StudentCreateProblem();
+            val activity = it.context as AppCompatActivity
+            activity.supportFragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit()
         }
     }
 
@@ -49,21 +57,23 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
 
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-        fun bindItems(data: Event){
+        fun bindItems(data: Problem){
             val title: TextView =itemView.findViewById(R.id.text_view_title)
             val date: TextView =itemView.findViewById(R.id.text_view_date)
             val description: TextView =itemView.findViewById(R.id.text_view_description)
-            val button1: Button =itemView.findViewById(R.id.seeButton)
-            val button2: Button =itemView.findViewById(R.id.editButton)
-            val button3: Button =itemView.findViewById(R.id.deleteButton)
+
 
             title.text=data.name
             date.text=data.date
-            description.text=data.description
+            description.text="Clase: "+ data.problemClass
+            val button1: Button =itemView.findViewById(R.id.button1)
+
+
+
 
             button1.setOnClickListener {
-                MyApplication.selectedEvent = data
-                var fragment:Fragment = StudentsInEventActivity();
+                MyApplication.problemCheck = data
+                var fragment:Fragment = StudentCreateSolution();
 
                 val activity = it.context as AppCompatActivity
                 activity.supportFragmentManager.beginTransaction()
@@ -71,7 +81,7 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
                     .commit()
             }
 
-            button2.setOnClickListener {
+            /*button2.setOnClickListener {
                 db.collection("events").document(data.eventId).get()
                     .addOnSuccessListener { documentSnapshot ->
                         MyApplication.eventEdit=documentSnapshot.toObject(Event::class.java)!!
@@ -85,21 +95,9 @@ class AdminEventsAdapter (var context: Context, var list: ArrayList<Event>): Rec
 
                     }
 
-            }
+            }*/
 
-            button3.setOnClickListener {
-                db.collection("events").document(data.eventId).get()
-                    .addOnSuccessListener { documentSnapshot ->
-                        documentSnapshot.reference.delete()
-                        var fragment:Fragment = AdminEventsActivity();
 
-                        val activity = it.context as AppCompatActivity
-                        activity.supportFragmentManager.beginTransaction()
-                            .replace(R.id.content_frame, fragment)
-                            .commit()
-                    }
-
-            }
         }
     }
 

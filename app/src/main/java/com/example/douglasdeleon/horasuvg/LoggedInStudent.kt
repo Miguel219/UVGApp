@@ -58,7 +58,7 @@ class LoggedInStudent : AppCompatActivity(), NavigationView.OnNavigationItemSele
             .load(url)
             .into(imageText)
 
-        var fragment: Fragment = HourControl()
+        var fragment: Fragment = StudentCreateProblem()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.content_frame, fragment)
@@ -71,7 +71,7 @@ class LoggedInStudent : AppCompatActivity(), NavigationView.OnNavigationItemSele
         } else if (supportFragmentManager.findFragmentById(R.id.content_frame)  is Start) {
             super.onBackPressed()
         }else{
-            var fragment: Fragment = Start()
+            var fragment: Fragment = StudentCreateProblem()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.content_frame, fragment)
@@ -90,27 +90,66 @@ class LoggedInStudent : AppCompatActivity(), NavigationView.OnNavigationItemSele
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_hours -> {
+         /*   R.id.nav_hours -> {
                 var fragment: Fragment = HourControl()
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit()
-            }
-            R.id.nav_activities -> {
+            }*/
+           /* R.id.nav_activities -> {
                 var fragment: Fragment = StudentEventsActivity()
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit()
-            }
-            R.id.nav_my_activities -> {
-                var fragment: Fragment = StudentMyEventsActivity()
+            }*/
+
+            R.id.nav_my_problems -> {
+                var fragment: Fragment = StudentMyProblemsActivity()
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit()
             }
+
+            R.id.nav_my_problems -> {
+                var fragment: Fragment = StudentMyProblemsActivity()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
+            }
+            R.id.nav_problems_solved -> {
+                var fragment: Fragment = StudentProblemsSolvedActivity()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
+            }
+            R.id.nav_my_problems_solved -> {
+                var fragment: Fragment = StudentMyProblemsSolvedActivity()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
+            }
+            R.id.nav_new_problem -> {
+                MyApplication.editEventId = ""
+                MyApplication.eventCheckId = ""
+                var fragment: Fragment = StudentCreateProblem()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
+            }
+            /*R.id.nav_my_activities -> {
+                var fragment: Fragment = StudentMyEventsActivity()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
+            }*/
             R.id.nav_logout -> {
                 MyApplication.userInsideId= ""
                 val intent: Intent = Intent(this, LoginActivity::class.java);

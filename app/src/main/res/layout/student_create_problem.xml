@@ -1,30 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
                                              android:layout_height="match_parent">
 
-   <!-- <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:id="@+id/volunteers_editText" android:hint="Cantidad Voluntarios"
-            android:inputType="number" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:id="@+id/hours_editText" android:hint="Cantidad Horas"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintVertical_bias="0.591" android:inputType="numberDecimal"/>
     <TextView
-            android:text="Crear Evento"
+            android:text="Crear Problema"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/title" android:textSize="24sp"
@@ -35,7 +15,7 @@
             app:layout_constraintVertical_bias="0.054" android:textAlignment="textStart"
             android:textColor="@android:color/white" android:background="@android:color/black"/>
     <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="298dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
@@ -46,7 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.49"
             app:layout_constraintVertical_bias="0.175"/>
     <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="298dp"
             android:layout_height="wrap_content"
             android:inputType="textNoSuggestions"
             android:ems="10"
@@ -54,17 +34,17 @@
             android:hint="Descripción" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.489"
-            app:layout_constraintVertical_bias="0.287"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.268"/>
     <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="298dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:id="@+id/class_editText" android:hint="Lugar"
+            android:id="@+id/class_editText" android:hint="Clase"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.489" app:layout_constraintVertical_bias="0.396"
+            app:layout_constraintVertical_bias="0.36"
             android:inputType="textNoSuggestions"/>
     <EditText
             android:layout_width="161dp"
@@ -77,7 +57,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.388"
-            app:layout_constraintVertical_bias="0.708" android:enabled="false"/>
+            app:layout_constraintVertical_bias="0.708" android:enabled="false" android:visibility="invisible"/>
+    <ImageView
+            android:layout_width="298dp"
+            android:layout_height="230dp" app:srcCompat="@drawable/newproblem"
+            android:id="@+id/problemImageUpload"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.608" app:layout_constraintVertical_bias="0.688"/>
     <Button
             android:text="Crear"
             android:layout_width="wrap_content"
@@ -98,6 +87,6 @@
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.875"
             android:drawableEnd="@drawable/ic_date_range_black_24dp"
-            app:layout_constraintVertical_bias="0.713" android:background="#FF05EA28"/>-->
+            app:layout_constraintVertical_bias="0.713" android:background="#FF05EA28" android:visibility="invisible"/>
 
 </android.support.constraint.ConstraintLayout>

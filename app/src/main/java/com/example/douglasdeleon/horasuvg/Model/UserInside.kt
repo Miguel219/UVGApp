@@ -6,6 +6,7 @@ package com.example.douglasdeleon.horasuvg.Model
       var type:Int = 0
       var userId:String =""
       var hours:Int = 0
+      var problemsSolved:Int =0
     constructor(){}
 
 

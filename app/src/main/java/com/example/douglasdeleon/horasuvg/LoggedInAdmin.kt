@@ -90,14 +90,22 @@ class LoggedInAdmin : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_myevents -> {
-                var fragment: Fragment = AdminEventsActivity()
+            R.id.nav_solveproblem -> {
+                var fragment: Fragment = StudentProblemsUnSolvedActivity()
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit()
             }
-            R.id.nav_create_event -> {
+            R.id.nav_hours -> {
+                var fragment: Fragment = HourControl()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
+            }
+
+           /* R.id.nav_create_event -> {
                 MyApplication.editEventId = ""
                 MyApplication.eventCheckId = ""
                 var fragment: Fragment = AdminCreateEvent()
@@ -105,7 +113,7 @@ class LoggedInAdmin : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit()
-            }
+            }*/
             R.id.nav_logout -> {
                 MyApplication.userInsideId= ""
                 val intent: Intent = Intent(this, LoginActivity::class.java);

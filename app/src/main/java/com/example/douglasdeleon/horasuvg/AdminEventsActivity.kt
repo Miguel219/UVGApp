@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
+import com.example.douglasdeleon.horasuvg.Model.Problem
 import com.example.douglasdeleon.horasuvg.adapter.AdminEventsAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_admin_events.*
@@ -34,8 +35,8 @@ class AdminEventsActivity : Fragment() {
 
         recyclerAdminEvents.layoutManager= LinearLayoutManager(thisContext, LinearLayout.VERTICAL,false)
 
-        MyApplication.eventsList = ArrayList<Event>()
-        var adapter = AdminEventsAdapter(thisContext!!, MyApplication.eventsList)
+        MyApplication.problemList = ArrayList<Problem>()
+        var adapter = AdminEventsAdapter(thisContext!!, MyApplication.problemList)
         adapter.notifyDataSetChanged()
         recyclerAdminEvents.adapter = adapter
         db.collection("userevents").whereEqualTo("userId",MyApplication.userInsideId).get()

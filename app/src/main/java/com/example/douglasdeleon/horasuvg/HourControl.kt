@@ -35,8 +35,8 @@ class HourControl: Fragment() {
             .addOnSuccessListener { documentSnapshot ->
                 var user: UserInside = documentSnapshot.toObject(UserInside::class.java)!!
                 MyApplication.userInside = user
-                hours.text = MyApplication.userInside.hours.toString();
-
+                hours.text = (MyApplication.userInside.problemsSolved/5).toBigInteger().toString();
+                problems.text = (MyApplication.userInside.problemsSolved.toString());
             }
         MyApplication.eventCheckId=""
         MyApplication.editEventId=""

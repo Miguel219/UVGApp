@@ -15,15 +15,19 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import com.example.douglasdeleon.horasuvg.AdminCreateEvent
+
 import com.example.douglasdeleon.horasuvg.AdminEventsActivity
 import com.example.douglasdeleon.horasuvg.Model.Event
 import com.example.douglasdeleon.horasuvg.Model.MyApplication
+import com.example.douglasdeleon.horasuvg.Model.Problem
+import com.example.douglasdeleon.horasuvg.Model.UserInside
 import com.example.douglasdeleon.horasuvg.R
+import com.example.douglasdeleon.horasuvg.StudentCreateProblem
+import com.example.douglasdeleon.horasuvg.StudentCreateSolution
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.HashMap
 
-class StudentMyEventsAdapter (var context: Context, var list: ArrayList<Event>): RecyclerView.Adapter<StudentMyEventsAdapter.ViewHolder>(){
+class StudentMyEventsAdapter (var context: Context, var list: ArrayList<Problem>): RecyclerView.Adapter<StudentMyEventsAdapter.ViewHolder>(){
 
     var myContext: Context = context
 
@@ -39,10 +43,10 @@ class StudentMyEventsAdapter (var context: Context, var list: ArrayList<Event>):
     override fun onBindViewHolder(holder: StudentMyEventsAdapter.ViewHolder, position: Int) {
         holder.bindItems(list[position])
         holder.itemView.setOnClickListener {
-            MyApplication.eventCheck = MyApplication.eventsList.get(position)
-            MyApplication.eventCheckId = MyApplication.eventCheck.eventId;
+            MyApplication.problemCheck = MyApplication.problemList.get(position)
+            MyApplication.problemCheckId = MyApplication.problemCheck.problemId;
             //Se cambia de pantalla
-            var fragment: Fragment = AdminCreateEvent();
+            var fragment: Fragment = StudentCreateProblem();
             val activity = it.context as AppCompatActivity
             activity.supportFragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
@@ -54,7 +58,7 @@ class StudentMyEventsAdapter (var context: Context, var list: ArrayList<Event>):
 
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-        fun bindItems(data: Event){
+        fun bindItems(data: Problem){
             val title: TextView =itemView.findViewById(R.id.text_view_title)
             val date: TextView =itemView.findViewById(R.id.text_view_date)
             val description: TextView =itemView.findViewById(R.id.text_view_description)
@@ -62,17 +66,33 @@ class StudentMyEventsAdapter (var context: Context, var list: ArrayList<Event>):
 
             title.text=data.name
             date.text=data.date
-            description.text=data.description
+            description.text="Clase: "+ data.problemClass
 
-            if(data.assigned) {
-                button.text = "Asignado"
-                button.setBackgroundColor(Color.WHITE)
+            if(data.solved == "1") {
+                button.text = "Ver solución"
+                button.setBackgroundColor(Color.GREEN)
+            }else{
+                button.visibility = View.INVISIBLE;
             }
             //if(data.status) {
               //  button.text = "Aprobado"
                // button.setBackgroundColor(Color.GREEN)
             //}
+            //
+            //
+            button.setOnClickListener {
+                MyApplication.problemCheck = data
+             MyApplication.solution = data
 
+
+                MyApplication.seeSolution = true
+                var fragment:Fragment = StudentCreateSolution();
+
+                val activity = it.context as AppCompatActivity
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit()
+            }
 
 
         }
